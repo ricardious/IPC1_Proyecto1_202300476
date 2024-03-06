@@ -1,4 +1,4 @@
-package Cuenta;
+package views;
 
 /**
  *
@@ -109,7 +109,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
 
         
         // CAMPO DE CONTRASEÑA
-        passwordField = new JPasswordField("Password");
+        passwordField = new JPasswordField();
         passwordField.setEchoChar('\u25CF');// Establecer el carácter de eco para ocultar la contraseña
         // DIMENSIONES - POSX, POSY, TAMX, TAMY
         passwordField.setBounds(xField, yPasswordField, fieldWidth, fieldHeight);
@@ -120,7 +120,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
         
     //-----------------------------------------Registro---------------------------------
         // Botón de Registro
-        JButton registerButton = new JButton("Registrarse");
+        registerButton = new JButton("Registrarse");
         // Dimensiones del botón de registro
         int buttonWidth = 120;
         int buttonHeight = 30;
@@ -138,7 +138,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
         
     //------------------------------------------------Inicio de Sesión--------------------------------------------
         // Botón de Inicio de Sesión
-        JButton loginButton = new JButton("Iniciar Sesión");
+        loginButton = new JButton("Iniciar Sesión");
         // Calculamos la posición en el eje x para centrar el botón de inicio de sesión horizontalmente
         int xLoginButton = xRegisterButton + buttonWidth + 10; // Añadimos el ancho del botón de registro y un pequeño margen
         // Calculamos la posición vertical del botón de inicio de sesión (usamos la misma posición vertical que el botón de registro)
@@ -210,15 +210,16 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
             System.out.println("Usuario: " + username);
             System.out.println("Password: " + pwd);
             
-//            if (username.equals("admin") && pwd.equals("admin")) {
-//                ADMINISTRADOR paciente = new ADMINISTRADOR();
-//                System.out.println("Welcome admin");
-//                this.dispose();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "User and/or password incorrect.", "Error con el LOGIN", 0);
-//            }
+            if (username.equals("202300476") && pwd.equals("proyecto1IPC1")) {
+                ADMINISTRADOR ventana_admin = new ADMINISTRADOR();
+                System.out.println("Welcome admin");
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "User and/or password incorrect.", "Error con el LOGIN", 0);
+            }
         } else if (Ae.getSource() == registerButton) {
-            System.out.println("Abrir la ventana para el registro");
+                REGISTER ventana_register = new REGISTER();
+                this.dispose();
         }
         System.out.println("================================================");
     }
