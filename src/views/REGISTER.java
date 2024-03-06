@@ -4,6 +4,7 @@ package views;
  *
  * @author Ricardious
  */
+import Cuenta.Main;
 import javax.swing.*;
 import java.awt.*;
 
@@ -151,8 +152,12 @@ public class REGISTER extends JFrame implements ActionListener {
             // Convertir el array de caracteres de la contraseña a una cadena
             char[] contrasenaChars = passwordField.getPassword();
             String pwd = new String(contrasenaChars);
-            String edad = edadField.getText();
+            int edad = Integer.parseInt(edadField.getText());
             // Asegurarse de que el campo de contraseña no sea nulo antes de obtener el texto
+            Main.agregarPaciente(nombres, apellidos, pwd, genero, edad, Main.codigoPaciente);
+            Main.codigoPaciente++;
+            
+            
             if (contrasenaChars != null) {
                 String contrasena = new String(contrasenaChars);
             }

@@ -5,6 +5,7 @@ package views;
  * @author Ricardious
  */
 
+import Cuenta.Main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,7 @@ import javax.swing.*;
 public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListener{
 
     public ADMINISTRADOR() {
-        // ----------------------TAMAÑO DEL FRAME O VENTANA------------------------
+        // ----------------------TAMAÑO DEL FRAME O VENTANA---------------------
         int frameWidth = 1000;
         int frameHeight = 600;
         
@@ -29,23 +30,41 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         JPanel pest3 = new JPanel(new FlowLayout());
           
        // Ajustar el tamaño preferido de los paneles
-        pest1.setPreferredSize(new Dimension(800, 500));
-        pest2.setPreferredSize(new Dimension(800, 500));
-        pest3.setPreferredSize(new Dimension(800, 500));
+//        pest1.setPreferredSize(new Dimension(800, 500));
+//        pest2.setPreferredSize(new Dimension(800, 500));
+//        pest3.setPreferredSize(new Dimension(800, 500));
         
+        //---------------------------Pestaña Doctores---------------------------
+//---------------------------Pestaña Doctores---------------------------
+// Tabla
+        String[] nombresColumnas = {"Código", "Nombre Completo", "Género", "Edad", "Especialidad", "Teléfono"};
+
+// Crear Tabla Jtable
+        JTable tableDoctores = new JTable(Main.convertirDatosDoctor_Tabla(), nombresColumnas);
+
+        JScrollPane scrollPane = new JScrollPane(tableDoctores);
+// Dimensiones del JScrollPane
+        int scrollPaneWidth = 750;
+        int scrollPaneHeight = 570;
+// Calcular coordenadas x e y para centrar el JScrollPane dentro del panel pest1
+        int xScrollPane = (frameWidth - scrollPaneWidth) / 2;
+        int yScrollPane = (frameHeight - scrollPaneHeight) / 2;
+        scrollPane.setBounds(xScrollPane, yScrollPane, scrollPaneWidth, scrollPaneHeight);
+
+        pest1.add(scrollPane);
+        //----------------------------------------------------------------------
+                
         getContentPane().add(tabbedPane);
         
         tabbedPane.addTab("Doctores", pest1);
         tabbedPane.addTab("Pacientes", pest2);
         tabbedPane.addTab("Productos", pest3);
         
-        //---------------------------Pestaña Doctores------------------------------
+
         
-        //TaBL
-        String[] columnsNames= {"Código", "Nombre Completo", "Género", "Edad", "Especialidad", "Correo"};
+
         
-        JTable table_Doctores= new JTable();
-        
+
         
         
         //------------Creando JFrame------------------

@@ -16,76 +16,104 @@ public class PACIENTE {
      */
     private String nombres;
     private String apellidos;
-    private String genero;
-    private String nombreUser;
     private String contrasena;
+    private String genero;
     private int edad;
-    static int code=202400000;
+    private int code;
 
-    public PACIENTE(String nombres, String apellidos, String genero, String nombreUser, String contrasena, int edad) {
+    public PACIENTE(String nombres, String apellidos, String contrasena, String genero, int edad, int code) {
         this.nombres = nombres;
         this.apellidos = apellidos;
-        this.genero = genero;
-        this.nombreUser = nombreUser;
         this.contrasena = contrasena;
+        this.genero = genero;
         this.edad = edad;
+        this.code = code;
     }
 
+    /**
+     * @return the nombres
+     */
     public String getNombres() {
         return nombres;
     }
 
+    /**
+     * @param nombres the nombres to set
+     */
     public void setNombres(String nombres) {
         this.nombres = nombres;
     }
 
+    /**
+     * @return the apellidos
+     */
     public String getApellidos() {
         return apellidos;
     }
 
+    /**
+     * @param apellidos the apellidos to set
+     */
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }
 
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-
-    public String getNombreUser() {
-        return nombreUser;
-    }
-
-    public void setNombreUser(String nombreUser) {
-        this.nombreUser = nombreUser;
-    }
-
+    /**
+     * @return the contrasena
+     */
     public String getContrasena() {
         return contrasena;
     }
 
+    /**
+     * @param contrasena the contrasena to set
+     */
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
 
+    /**
+     * @return the genero
+     */
+    public String getGenero() {
+        return genero;
+    }
+
+    /**
+     * @param genero the genero to set
+     */
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    /**
+     * @return the edad
+     */
     public int getEdad() {
         return edad;
     }
 
+    /**
+     * @param edad the edad to set
+     */
     public void setEdad(int edad) {
         this.edad = edad;
     }
 
-    public static int getCode() {
+    /**
+     * @return the code
+     */
+    public int getCode() {
         return code;
     }
 
-    public static void setCode(int code) {
-        PACIENTE.code = code;
+    /**
+     * @param code the code to set
+     */
+    public void setCode(int code) {
+        this.code = code;
     }
-    
+
+
     
 }
