@@ -82,7 +82,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
         this.add(usernameLabel);
 
         // CAMPO DE TEXTO PARA EL USER
-        usernameField = new JTextField();
+        usernameField = new JTextField("202300476");
         // TAMAÑO DEL CAMPO DE TEXTO
         int fieldWidth = 260;
         int fieldHeight = 25;
@@ -218,7 +218,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
                 JOptionPane.showMessageDialog(this, "User and/or password incorrect.", "Error con el LOGIN", 0);
             }
         } else if (Ae.getSource() == registerButton) {
-                doctorREGISTER ventana_register = new doctorREGISTER();
+                REGISTER ventana_register = new REGISTER();
                 this.dispose();
         }
         System.out.println("================================================");

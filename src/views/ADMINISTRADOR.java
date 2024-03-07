@@ -18,8 +18,12 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
     JButton crearDoctor = new JButton();
     JButton actualizarDoctor = new JButton();
     JButton eliminarDoctor = new JButton();
-    JButton exitPacientes = new JButton();
-    JButton registerPacientes = new JButton();
+    JButton crearPaciente = new JButton();
+    JButton actualizarPaciente = new JButton();
+    JButton eliminarPaciente = new JButton();
+    JButton crearProducto = new JButton();
+    JButton actualizarProducto = new JButton();
+    JButton eliminarProducto = new JButton();
 
     public ADMINISTRADOR() {
         // ====================TAMAÑO DEL FRAME O VENTANA======================
@@ -89,35 +93,82 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         pest1.add(eliminarDoctor);
         
         //=======================================================================
-        
-        //Boton agregar pacientes
-        registerPacientes = new JButton("Agregar");
-        registerPacientes.setBounds(800, 35, 180, 50);
-        registerPacientes.setEnabled(true);
-        registerPacientes.addActionListener(this);
-        pest2.add(registerPacientes);
-        
-        //Boton Elminar pacientes
-        exitPacientes  = new JButton("Salir");
-        exitPacientes.setBounds(1000, 35, 180, 50);
-        exitPacientes.setEnabled(true);
-        exitPacientes.addActionListener(this);
-        pest2.add(exitPacientes);
+
             
-        //------------------------Table pacientes-----------------------------------------
+        //--------------------------Table pacientes-----------------------------------------
         String[] pacientesColumnas = {"Código", "Nombre Completo", "Género", "Edad"};
         
         JTable tablePacientes = new JTable(Main.convertirDatosPaciente_Tabla(), pacientesColumnas);
         
         JScrollPane scrollPacientes = new JScrollPane(tablePacientes);
-        
+        scrollPacientes.setBounds(xScrollPane, yScrollPane, scrollPaneWidth, scrollPaneHeight);
 
         pest2.add(scrollPacientes);
         
-        
-        
+        // Coordenadas y iniciales para los botones
+        int yBoton = yScrollPane;
                 
+        //Boton agregar pacientes
+        crearPaciente = new JButton("Crear Paciente");
+        crearPaciente.setBounds(xBotones, yBoton, buttonWidth, buttonHeight);
+        yBoton += buttonHeight + verticalSpacing; // Ajuste para el siguiente botón
+        crearPaciente.setEnabled(true);
+        crearPaciente.addActionListener(this);
+        pest2.add(crearPaciente);
+        
+        //Boton Actualizar pacientes
+        actualizarPaciente  = new JButton("Actualizar Paciente");
+        actualizarPaciente.setBounds(xBotones, yBoton, buttonWidth, buttonHeight);
+        yBoton += buttonHeight + verticalSpacing; // Ajuste para el siguiente botón
+        actualizarPaciente.setEnabled(true);
+        actualizarPaciente.addActionListener(this);
+        pest2.add(actualizarPaciente);
+        
+        // Boton eliminar pacientes
+        eliminarPaciente = new JButton("Eliminar Paciente");
+        eliminarPaciente.setBounds(xBotones, yBoton, buttonWidth, buttonHeight);
+        eliminarPaciente.setEnabled(true);
+        eliminarPaciente.addActionListener(this);
+        pest2.add(eliminarPaciente);
 
+                //=======================================================================
+
+            
+        //--------------------------Table pacientes-----------------------------------------
+        String[] productosColumnas = {"Código", "Nombre", "Cantidad", "Descripción", "Precio"};
+        
+        JTable tableProductos = new JTable(Main.convertirDatosProductos_Tabla(), productosColumnas);
+        
+        JScrollPane scrollProductos = new JScrollPane(tableProductos);
+        scrollProductos.setBounds(xScrollPane, yScrollPane, scrollPaneWidth, scrollPaneHeight);
+
+        pest3.add(scrollProductos);
+        
+        // Coordenadas y iniciales para los botones
+        int yBotton = yScrollPane;
+                
+        //Boton agregar pacientes
+        crearProducto = new JButton("Crear Producto");
+        crearProducto.setBounds(xBotones, yBotton, buttonWidth, buttonHeight);
+        yBotton += buttonHeight + verticalSpacing; // Ajuste para el siguiente botón
+        crearProducto.setEnabled(true);
+        crearProducto.addActionListener(this);
+        pest3.add(crearProducto);
+        
+        //Boton Actualizar pacientes
+        actualizarProducto  = new JButton("Actualizar Producto");
+        actualizarProducto.setBounds(xBotones, yBotton, buttonWidth, buttonHeight);
+        yBotton += buttonHeight + verticalSpacing; // Ajuste para el siguiente botón
+        actualizarProducto.setEnabled(true);
+        actualizarProducto.addActionListener(this);
+        pest3.add(actualizarProducto);
+        
+        // Boton eliminar pacientes
+        eliminarProducto = new JButton("Eliminar Producto");
+        eliminarProducto.setBounds(xBotones, yBotton, buttonWidth, buttonHeight);
+        eliminarProducto.setEnabled(true);
+        eliminarProducto.addActionListener(this);
+        pest3.add(eliminarProducto);
                 
         getContentPane().add(tabbedPane);
         
@@ -150,7 +201,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
             this.dispose();
             doctorREGISTER vtn_login = new doctorREGISTER();
             
-        } else if (e.getSource() == registerPacientes) {
+        } else if (e.getSource() == crearPaciente) {
             this.dispose();
             REGISTER vtn_register = new REGISTER();
         }

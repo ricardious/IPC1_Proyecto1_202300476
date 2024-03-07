@@ -219,10 +219,13 @@ public class doctorREGISTER extends JFrame implements ActionListener {
             
             //==========================================================================================================  
 
+            //JOptionPane.showMessageDialog(this, "Su codigo es: " + Main.codigoDoctor,"Codigo", JOptionPane.WARNING_MESSAGE);
 
         // Agregar el doctor solo si todos los campos obligatorios están llenos
         Main.agregarDoctor(Main.codigoDoctor, nombres, apellidos, genero, edad, especialidad, telefono);
         Main.codigoDoctor++;
+        
+        
         
         this.dispose();
         

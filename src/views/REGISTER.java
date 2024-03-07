@@ -24,7 +24,7 @@ public class REGISTER extends JFrame implements ActionListener {
 
 
     JButton registerButton;
-    //JButton returnButton;
+    JButton returnButton;
     //----------------------------------------------------
 
     public REGISTER() {
@@ -114,7 +114,7 @@ public class REGISTER extends JFrame implements ActionListener {
         int yEdadField = yEdadLabel;
         edadField.setBounds(xEdadField, yEdadField, fieldWidth, fieldHeight);
         this.add(edadField);
-
+//=============================================================================
         // Button for registration
         registerButton = new JButton("Registrarse");
         int buttonWidth = 120;
@@ -126,7 +126,7 @@ public class REGISTER extends JFrame implements ActionListener {
         this.add(registerButton);
 
         // Button for returning
-        JButton returnButton = new JButton("Regresar");
+        returnButton = new JButton("Regresar");
         int xReturnButton = (frameWidth - buttonWidth) / 2;
         int yReturnButton = yRegisterButton + 40;
         returnButton.setBounds(xReturnButton, yReturnButton, buttonWidth, buttonHeight);
@@ -154,22 +154,49 @@ public class REGISTER extends JFrame implements ActionListener {
             // Convertir el array de caracteres de la contraseña a una cadena
             char[] contrasenaChars = passwordField.getPassword();
             String pwd = new String(contrasenaChars);
-            int edad = Integer.parseInt(edadField.getText());
+            int edad = 0;
+            
+            //=================================================================
+                    // Verificar que los campos obligatorios no estén vacíos
+        if (nombres.isEmpty() || apellidos.isEmpty() || contrasenaChars.length == 0 || genero.isEmpty()) {
+            // Mostrar un mensaje de error al usuario
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Campos Vacíos", JOptionPane.ERROR_MESSAGE);
+            return; // Salir del método actionPerformed si hay campos obligatorios vacíos
+        }    
+            //=================================================================            
+            
+                        try {
+                // Obtener el texto del campo de texto para la edad
+                String edadTexto = edadField.getText();
+
+                // Verificar si el campo de texto para la edad está vacío
+                if (edadTexto.isEmpty()) {
+                    // Mostrar un mensaje de error al usuario
+                    JOptionPane.showMessageDialog(this, "Por favor, ingrese una edad válida.", "Error en la Edad", JOptionPane.ERROR_MESSAGE);
+                    return; // Salir del método actionPerformed si la edad está vacía
+                }
+                // Convertir la cadena de texto en un entero
+                edad = Integer.parseInt(edadTexto);
+            } catch (NumberFormatException ex) {
+                // Manejar el error de formato de edad aquí
+                // Puedes mostrar un mensaje de error al usuario
+                JOptionPane.showMessageDialog(this, "Por favor, ingrese una edad válida.", "Error en la Edad", JOptionPane.ERROR_MESSAGE);
+                return; // Salir del método actionPerformed si hay un error en la edad
+            }
+            
+            JOptionPane.showMessageDialog(this, "Su codigo es: " + Main.codigoPaciente,"Codigo", JOptionPane.WARNING_MESSAGE);
             
             Main.agregarPaciente(nombres, apellidos, pwd, genero, edad, Main.codigoPaciente);
             Main.codigoPaciente++;
             
             this.dispose();
             
-            ADMINISTRADOR vtn_admin = new ADMINISTRADOR();
-            // Asegurarse de que los campos no sean nulos antes de obtener el texto, exceptuando el numero de telefono
-            if (contrasenaChars != null) {
-                String contrasena = new String(contrasenaChars);
-            }
+            LOGIN vtn_admin = new LOGIN();
+
             // Otros campos de texto y asignaciones
 
             // Realizar cualquier acción adicional con los datos recopilados, como validarlos o procesarlos
-        } else if (e.getActionCommand().equals("Regresar")) {
+        } else if (e.getSource() == returnButton) {
             // Acción a realizar cuando se hace clic en el botón de regresar
             // Por ejemplo, cerrar la ventana de registro y volver a la ventana anterior
             

@@ -15,8 +15,12 @@ public class Main{
     
     public static ArrayList<DOCTOR> listaDoctores = new ArrayList<>();
     public static ArrayList<PACIENTE> listaPacientes = new ArrayList<>();
+    public static ArrayList<PRODUCTO> listaProductos = new ArrayList<>();
     public static int codigoPaciente = 202400000;
     public static int codigoDoctor = 1000;
+    public static int codigoProducto;
+    
+    
     public static void main(String[] args){ 
         
         //ListaDoctores---------------------------------------------------------
@@ -35,6 +39,8 @@ public class Main{
         LOGIN ventana_login = new LOGIN();
 
     }
+    
+    //===============================================================================================
         public static Object[][] convertirDatosPaciente_Tabla() {
         int filas = listaPacientes.size();
         Object[][] arreglo = new Object[filas][6];
@@ -55,6 +61,7 @@ public class Main{
         listaPacientes.add(new PACIENTE(nombres, apellidos, contrasena, genero, edad, code));
     }
     
+    //=========================================================================================
     public static Object[][] convertirDatosDoctor_Tabla() {
         int filas = listaDoctores.size();
         Object[][] arreglo = new Object[filas][6];
@@ -76,6 +83,30 @@ public class Main{
     public static void agregarDoctor(int codigo, String nombres, String apellidos, String genero, int edad, String especialidad, String telefono){
         listaDoctores.add(new DOCTOR(codigo, nombres, apellidos, genero, edad, especialidad, telefono));
     }
+    
+    //============================================================================================
+        public static Object[][] convertirDatosProductos_Tabla() {
+        int filas = listaDoctores.size();
+        Object[][] arreglo = new Object[filas][5];
+        
+        for (int i = 0; i < filas; i++) {
+            PRODUCTO temp_Producto = listaProductos.get(i);
+            arreglo[i][0] = temp_Producto.getCode();
+            arreglo[i][1] = temp_Producto.getNombre();
+            arreglo[i][2] = temp_Producto.getCantidad();
+            arreglo[i][3] = temp_Producto.getDescripcion();
+            arreglo[i][4] = temp_Producto.getPrecio();
+        }
+        
+        return arreglo;
+    }
+    
+    public static void agregarProducto(int code, String nombre, int cantidad, String descripcion, float precio){
+        listaProductos.add(new PRODUCTO(code, nombre, cantidad, descripcion, precio));
+    }
+    
+    
+    
     
     // Método para buscar un doctor en la lista de doctores por su código
     private DOCTOR buscarDoctor(int codigo) {
