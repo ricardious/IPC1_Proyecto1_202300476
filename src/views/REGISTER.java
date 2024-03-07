@@ -4,7 +4,7 @@ package views;
  *
  * @author Ricardious
  */
-import beans.Main;
+import Control.Main;
 import javax.swing.*;
 import java.awt.*;
 
@@ -155,14 +155,14 @@ public class REGISTER extends JFrame implements ActionListener {
             char[] contrasenaChars = passwordField.getPassword();
             String pwd = new String(contrasenaChars);
             int edad = Integer.parseInt(edadField.getText());
-            // Asegurarse de que el campo de contraseña no sea nulo antes de obtener el texto
+            
             Main.agregarPaciente(nombres, apellidos, pwd, genero, edad, Main.codigoPaciente);
             Main.codigoPaciente++;
             
             this.dispose();
             
             ADMINISTRADOR vtn_admin = new ADMINISTRADOR();
-            
+            // Asegurarse de que los campos no sean nulos antes de obtener el texto, exceptuando el numero de telefono
             if (contrasenaChars != null) {
                 String contrasena = new String(contrasenaChars);
             }

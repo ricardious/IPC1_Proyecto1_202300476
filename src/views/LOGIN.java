@@ -218,7 +218,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
                 JOptionPane.showMessageDialog(this, "User and/or password incorrect.", "Error con el LOGIN", 0);
             }
         } else if (Ae.getSource() == registerButton) {
-                REGISTER ventana_register = new REGISTER();
+                doctorREGISTER ventana_register = new doctorREGISTER();
                 this.dispose();
         }
         System.out.println("================================================");

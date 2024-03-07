@@ -5,7 +5,7 @@ package views;
  * @author Ricardious
  */
 
-import beans.Main;
+import Control.Main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +22,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
     JButton registerPacientes = new JButton();
 
     public ADMINISTRADOR() {
-        // ----------------------TAMAÑO DEL FRAME O VENTANA---------------------
+        // ====================TAMAÑO DEL FRAME O VENTANA======================
         int frameWidth = 1000;
         int frameHeight = 600;
         
@@ -30,56 +30,65 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         
         //Crear las pestañas
-        JPanel pest1 = new JPanel(new FlowLayout());
-        JPanel pest2 = new JPanel(new FlowLayout());
-        JPanel pest3 = new JPanel(new FlowLayout());
-          
-       // Ajustar el tamaño preferido de los paneles
-//        pest1.setPreferredSize(new Dimension(800, 500));
-//        pest2.setPreferredSize(new Dimension(800, 500));
-//        pest3.setPreferredSize(new Dimension(800, 500));
+        JPanel pest1 = new JPanel(null);
+        JPanel pest2 = new JPanel(null);
+        JPanel pest3 = new JPanel(null);        
+        // Tabla
+        String[] nombresColumnas = {"Código", "Nombre Completo", "Género", "Edad", "Especialidad", "Teléfono"};
+
+        // Crear Tabla Jtable
+        JTable tableDoctores = new JTable(Main.convertirDatosDoctor_Tabla(), nombresColumnas);
+
+        JScrollPane scrollPane = new JScrollPane(tableDoctores);
+        // Dimensiones del JScrollPane
+        int scrollPaneWidth = 600;
+        int scrollPaneHeight = 400;
+        // Calcular coordenadas x e y para centrar el JScrollPane dentro del panel pest1
+        int xScrollPane = (frameWidth - scrollPaneWidth) / 2-100;
+        int yScrollPane = (frameHeight - scrollPaneHeight) / 2-40;
+        scrollPane.setBounds(xScrollPane, yScrollPane, scrollPaneWidth, scrollPaneHeight);
+
+        pest1.add(scrollPane);
         
+        // Espacio entre la tabla y los botones
+        int verticalSpacing = 20;
+
+        // Coordenadas x para los botones, alineadas con el lado derecho de la tabla
+        int xBotones = xScrollPane + scrollPaneWidth + verticalSpacing;
+
+        // Coordenadas y iniciales para los botones
+        int yBotones = yScrollPane;
+
+        // Ancho y alto de los botones
+        int buttonWidth = 150;
+        int buttonHeight = 30;
+
+                     
         //---------------------------Pestaña Doctores---------------------------
         //Boton crear doctores
         crearDoctor = new JButton("Crear Doctor");
-        crearDoctor.setBounds(800, 35, 180, 50);
+        crearDoctor.setBounds(xBotones, yBotones, buttonWidth, buttonHeight);
+        yBotones += buttonHeight + verticalSpacing; // Ajuste para el siguiente botón
         crearDoctor.setEnabled(true);
         crearDoctor.addActionListener(this);
         pest1.add(crearDoctor);
         
         //Boton Actualizar Doctor
         actualizarDoctor  = new JButton("Actualizar Doctor");
-        actualizarDoctor.setBounds(1000, 35, 180, 50);
+        actualizarDoctor.setBounds(xBotones, yBotones, buttonWidth, buttonHeight);
+        yBotones += buttonHeight + verticalSpacing; // Ajuste para el siguiente botón
         actualizarDoctor.setEnabled(true);
         actualizarDoctor.addActionListener(this);
         pest1.add(actualizarDoctor);
         
         //Boton Eliminar Doctor
         eliminarDoctor = new JButton("Eliminar Doctor");
-        eliminarDoctor.setBounds(1200, 35, 180, 50);
+        eliminarDoctor.setBounds(xBotones, yBotones, buttonWidth, buttonHeight);
         eliminarDoctor.setEnabled(true);
         eliminarDoctor.addActionListener(this);
         pest1.add(eliminarDoctor);
         
-        
-// Tabla
-        String[] nombresColumnas = {"Código", "Nombre Completo", "Género", "Edad", "Especialidad", "Teléfono"};
-
-// Crear Tabla Jtable
-        JTable tableDoctores = new JTable(Main.convertirDatosDoctor_Tabla(), nombresColumnas);
-
-        JScrollPane scrollPane = new JScrollPane(tableDoctores);
-// Dimensiones del JScrollPane
-        int scrollPaneWidth = 850;
-        int scrollPaneHeight = 870;
-// Calcular coordenadas x e y para centrar el JScrollPane dentro del panel pest1
-        int xScrollPane = (frameWidth - scrollPaneWidth) / 2-100;
-        int yScrollPane = (frameHeight - scrollPaneHeight) / 2;
-        scrollPane.setBounds(xScrollPane, yScrollPane, scrollPaneWidth, scrollPaneHeight);
-
-        pest1.add(scrollPane);
-        
-        //----------------------------------------------------------------------
+        //=======================================================================
         
         //Boton agregar pacientes
         registerPacientes = new JButton("Agregar");
@@ -107,14 +116,14 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         
         
         
-        
+                
+
                 
         getContentPane().add(tabbedPane);
         
         tabbedPane.addTab("Doctores", pest1);
         tabbedPane.addTab("Pacientes", pest2);
         tabbedPane.addTab("Productos", pest3);
-        
 
         
 
@@ -137,9 +146,9 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == exitPacientes){
+        if (e.getSource() == crearDoctor){
             this.dispose();
-            LOGIN vtn_login = new LOGIN();
+            doctorREGISTER vtn_login = new doctorREGISTER();
             
         } else if (e.getSource() == registerPacientes) {
             this.dispose();

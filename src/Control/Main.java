@@ -1,4 +1,4 @@
-package beans;
+package Control;
 
 import views.LOGIN;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -16,15 +16,15 @@ public class Main{
     public static ArrayList<DOCTOR> listaDoctores = new ArrayList<>();
     public static ArrayList<PACIENTE> listaPacientes = new ArrayList<>();
     public static int codigoPaciente = 202400000;
-    public static int codigoDoctore = 001;
+    public static int codigoDoctor = 1000;
     public static void main(String[] args){ 
         
         //ListaDoctores---------------------------------------------------------
         
-        listaDoctores.add(new DOCTOR (1,"Alex Ricardo", "Castañeda Rodríguez", "Hombre", 19, "Doctor", "59573806"));
-        listaDoctores.add(new DOCTOR (2,"Alex Ricardo", "Castañeda Rodríguez", "Hombre", 19, "Doctor", "59573806"));
-        listaDoctores.add(new DOCTOR (3,"Alex Ricardo", "Castañeda Rodríguez", "Hombre", 19, "Doctor", "59573806"));
-        listaDoctores.add(new DOCTOR (4,"Alex Ricardo", "Castañeda Rodríguez", "Hombre", 19, "Doctor", "59573806"));
+//        listaDoctores.add(new DOCTOR (1,"Alex Ricardo", "Castañeda Rodríguez", "Hombre", 19, "Doctor", "59573806"));
+//        listaDoctores.add(new DOCTOR (2,"Alex Ricardo", "Castañeda Rodríguez", "Hombre", 19, "Doctor", "59573806"));
+//        listaDoctores.add(new DOCTOR (3,"Alex Ricardo", "Castañeda Rodríguez", "Hombre", 19, "Doctor", "59573806"));
+//        listaDoctores.add(new DOCTOR (4,"Alex Ricardo", "Castañeda Rodríguez", "Hombre", 19, "Doctor", "59573806"));
 
         try {
             UIManager.setLookAndFeel( new FlatDarkLaf() );
@@ -76,4 +76,16 @@ public class Main{
     public static void agregarDoctor(int codigo, String nombres, String apellidos, String genero, int edad, String especialidad, String telefono){
         listaDoctores.add(new DOCTOR(codigo, nombres, apellidos, genero, edad, especialidad, telefono));
     }
+    
+    // Método para buscar un doctor en la lista de doctores por su código
+    private DOCTOR buscarDoctor(int codigo) {
+        for (DOCTOR doctor : Main.listaDoctores) {
+            if (doctor.getCodigo() == codigo) {
+                return doctor;
+            }
+        }
+        return null; // No se encontró el doctor
+    }
+
+
 }

@@ -1,33 +1,40 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package beans;
+package Control;
 
 /**
  *
  * @author Ricardious
  */
-public class PACIENTE {
-    
-    /**
-     * aquí implementamos los atributos para la clase persona que seria los
-     * siguiente nombre, documento, nombre de usuario, y la contraseña
-     */
+public class DOCTOR {
+    private int codigo;
     private String nombres;
     private String apellidos;
-    private String contrasena;
     private String genero;
     private int edad;
-    private int code;
+    private String especialidad;
+    private String telefono;
 
-    public PACIENTE(String nombres, String apellidos, String contrasena, String genero, int edad, int code) {
+    public DOCTOR(int codigo, String nombres, String apellidos, String genero, int edad, String especialidad, String telefono) {
+        this.codigo = codigo;
         this.nombres = nombres;
         this.apellidos = apellidos;
-        this.contrasena = contrasena;
         this.genero = genero;
         this.edad = edad;
-        this.code = code;
+        this.especialidad = especialidad;
+        this.telefono = telefono;
+    }
+
+    /**
+     * @return the codigo
+     */
+    public int getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * @param codigo the codigo to set
+     */
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     /**
@@ -59,20 +66,6 @@ public class PACIENTE {
     }
 
     /**
-     * @return the contrasena
-     */
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    /**
-     * @param contrasena the contrasena to set
-     */
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    /**
      * @return the genero
      */
     public String getGenero() {
@@ -101,18 +94,33 @@ public class PACIENTE {
     }
 
     /**
-     * @return the code
+     * @return the especialidad
      */
-    public int getCode() {
-        return code;
+    public String getEspecialidad() {
+        return especialidad;
     }
 
     /**
-     * @param code the code to set
+     * @param especialidad the especialidad to set
      */
-    public void setCode(int code) {
-        this.code = code;
+    public void setEspecialidad(String especialidad) {
+        this.especialidad = especialidad;
     }
+
+    /**
+     * @return the telefono
+     */
+    public String getTelefono() {
+        return telefono;
+    }
+
+    /**
+     * @param telefono the telefono to set
+     */
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
 
 
     
