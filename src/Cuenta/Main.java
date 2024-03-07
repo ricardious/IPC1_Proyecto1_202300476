@@ -1,4 +1,4 @@
-package Cuenta;
+package beans;
 
 import views.LOGIN;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -51,7 +51,7 @@ public class Main{
         return arreglo;
     }
     
-            public static void agregarPaciente(String nombres, String apellidos, String contrasena, String genero, int edad, int code){
+    public static void agregarPaciente(String nombres, String apellidos, String contrasena, String genero, int edad, int code){
         listaPacientes.add(new PACIENTE(nombres, apellidos, contrasena, genero, edad, code));
     }
     

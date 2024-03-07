@@ -109,7 +109,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
 
         
         // CAMPO DE CONTRASEÑA
-        passwordField = new JPasswordField();
+        passwordField = new JPasswordField("proyecto1IPC1");
         passwordField.setEchoChar('\u25CF');// Establecer el carácter de eco para ocultar la contraseña
         // DIMENSIONES - POSX, POSY, TAMX, TAMY
         passwordField.setBounds(xField, yPasswordField, fieldWidth, fieldHeight);

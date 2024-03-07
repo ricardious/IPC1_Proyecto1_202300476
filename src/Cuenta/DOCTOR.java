@@ -1,4 +1,4 @@
-package Cuenta;
+package beans;
 
 /**
  *

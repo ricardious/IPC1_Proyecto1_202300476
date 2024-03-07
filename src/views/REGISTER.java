@@ -4,7 +4,7 @@ package views;
  *
  * @author Ricardious
  */
-import Cuenta.Main;
+import beans.Main;
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,6 +21,7 @@ public class REGISTER extends JFrame implements ActionListener {
     private JTextField edadField;
 
     private JComboBox<String> genderComboBox;
+
 
     JButton registerButton;
     //JButton returnButton;
@@ -79,11 +80,12 @@ public class REGISTER extends JFrame implements ActionListener {
         passwordLabel.setBounds(xPasswordLabel, yPasswordLabel, labelWidth, labelHeight);
         this.add(passwordLabel);
         //Campo para la contraseña
-        JPasswordField passwordField = new JPasswordField();
+        passwordField = new JPasswordField();
         passwordField.setEchoChar((char) 0);// Establecer el carácter de eco para ocultar la contraseña
         int xPasswordField = xFirstNameField;
         int yPasswordField = yLastNameField+40;
         passwordField.setBounds(xPasswordField, yPasswordField, fieldWidth, fieldHeight);
+        passwordField.addActionListener(this);
         this.add(passwordField);
         
         // ComboBox for gender
@@ -157,6 +159,9 @@ public class REGISTER extends JFrame implements ActionListener {
             Main.agregarPaciente(nombres, apellidos, pwd, genero, edad, Main.codigoPaciente);
             Main.codigoPaciente++;
             
+            this.dispose();
+            
+            ADMINISTRADOR vtn_admin = new ADMINISTRADOR();
             
             if (contrasenaChars != null) {
                 String contrasena = new String(contrasenaChars);
