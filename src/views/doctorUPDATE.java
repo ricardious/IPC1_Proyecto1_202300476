@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package views;
 
 import java.awt.Font;
@@ -19,23 +15,34 @@ import javax.swing.JTextField;
  * @author Ricardious
  */
 public class doctorUPDATE extends JFrame implements ActionListener {
-        private JTextField nombresField;
+
+    private JTextField nombresField;
     private JTextField apellidosField;
     private JTextField especialidadField;
     private JPasswordField passwordField;
     private JComboBox<String> genderComboBox;
     private JTextField edadField;
     private JTextField telefonoField;
-    private JButton registerButton;
+    private JButton actualizarButton;
     private JButton returnButton;
+    private JTextField codeField;
+    
+    
+    private JButton codeButton;
+    // Método para obtener el género seleccionado
+public String obtenerGeneroSeleccionado() {
+    return (String) genderComboBox.getSelectedItem();
+}
 
-    public doctorUPDATE() {
-        
-        // Frame dimensions
+
+    public doctorUPDATE(int codigo, String nombres, String apellidos, String genero, int edad, String especialidad, String telefono) {
+
+// Frame dimensions
         int frameWidth = 700;
         int frameHeight = 500;
-        //--------------------Registro Doctor----------------------------
-        // Label "Registro Doctor"
+
+//--------------------Registro Doctor----------------------------
+// Label "Registro Doctor"
         JLabel titleLabel = new JLabel("Actualizar Doctor");
         titleLabel.setFont(new Font("Geostar", Font.BOLD, 20));
         int titleLabelWidth = titleLabel.getPreferredSize().width;
@@ -43,119 +50,131 @@ public class doctorUPDATE extends JFrame implements ActionListener {
         int yTitleLabel = 20;
         titleLabel.setBounds(xTitleLabel, yTitleLabel, titleLabelWidth, titleLabel.getPreferredSize().height);
         this.add(titleLabel);
-        
-        // Label nombres
-        JLabel nombresLabel = new JLabel("Nombres:");
+
+// Label code
+        JLabel codeLabel = new JLabel("Código");
         int labelWidth = 100;
         int labelHeight = 25;
-        int xFirstNameLabel = (frameWidth - labelWidth - 400) / 2;
-        int yFirstNameLabel = yTitleLabel + 50;
+        int xCodeLabel = (frameWidth - labelWidth - 400) / 2;
+        int yCodeLabel = yTitleLabel + 50;
+        codeLabel.setBounds(xCodeLabel, yCodeLabel, labelWidth, labelHeight);
+        this.add(codeLabel);
+        
+
+//Field code
+        codeField = new JTextField();
+        codeField.setText(String.valueOf(codigo));
+        int fieldWidth = 400;
+        int fieldHeight = 25;
+        int xCodeField = xCodeLabel + labelWidth;
+        int yCodeField = yCodeLabel;
+        codeField.setBounds(xCodeField, yCodeField, fieldWidth, fieldHeight);
+        codeField.setEnabled(false);
+        this.add(codeField);
+        
+        // Label nombres
+        JLabel nombresLabel = new JLabel("Nombres");
+        
+        int xFirstNameLabel = xCodeLabel;
+        int yFirstNameLabel = yCodeLabel + 40; // Adjusted position
         nombresLabel.setBounds(xFirstNameLabel, yFirstNameLabel, labelWidth, labelHeight);
         this.add(nombresLabel);
 
-        //Field nombres
+//Field nombres
         nombresField = new JTextField();
-        int fieldWidth = 400;
-        int fieldHeight = 25;
-        int xFirstNameField = xFirstNameLabel + labelWidth;
+        nombresField.setText(nombres);
+        int xFirstNameField = xCodeField;
         int yFirstNameField = yFirstNameLabel;
         nombresField.setBounds(xFirstNameField, yFirstNameField, fieldWidth, fieldHeight);
         this.add(nombresField);
-        
-        // Label apellidos
-        JLabel apellidosLabel = new JLabel("Apellidos:");
-        int xLastNameLabel = xFirstNameLabel;
-        int yLastNameLabel = yFirstNameLabel + 40;
+
+// Label apellidos
+        JLabel apellidosLabel = new JLabel("Apellidos");
+        int xLastNameLabel = xCodeLabel;
+        int yLastNameLabel = yFirstNameLabel + 40; // Adjusted position
         apellidosLabel.setBounds(xLastNameLabel, yLastNameLabel, labelWidth, labelHeight);
         this.add(apellidosLabel);
 
-        // field apellidos
+// field apellidos
         apellidosField = new JTextField();
-        int xLastNameField = xLastNameLabel + labelWidth;
+        apellidosField.setText(apellidos);
+        int xLastNameField = xCodeField;
         int yLastNameField = yLastNameLabel;
         apellidosField.setBounds(xLastNameField, yLastNameField, fieldWidth, fieldHeight);
         this.add(apellidosField);
+
+
+// ComboBox for gender
+        JLabel genderLabel = new JLabel("Género");
         
-        //Etiqueta para especialidad
-        JLabel especialidadLabel = new JLabel("Especialidad:");
-        int xEspecialidadLabel = xFirstNameLabel;
-        int yEspecialidadLabel = yLastNameLabel+40;
-        especialidadLabel.setBounds(xEspecialidadLabel, yEspecialidadLabel, labelWidth, labelHeight);
-        this.add(especialidadLabel);
-        
-        //Campo para la especialidad
-        especialidadField = new JTextField();
-        int xEspecialidadField = xFirstNameField;
-        int yEspecialidadField = yLastNameField + 40;
-        especialidadField.setBounds(xEspecialidadField, yEspecialidadField, fieldWidth, fieldHeight);
-        especialidadField.addActionListener(this);
-        this.add(especialidadField);
-        
-        //Etiqueta para la contraseña
-        JLabel passwordLabel = new JLabel("Contraseña:");
-        int xPasswordLabel = xEspecialidadLabel;
-        int yPasswordLabel = yEspecialidadLabel + 40;
-        passwordLabel.setBounds(xPasswordLabel, yPasswordLabel, labelWidth, labelHeight);
-        this.add(passwordLabel);
-        //Campo para la contraseña
-        passwordField = new JPasswordField();
-        passwordField.setEchoChar((char) 0);// Establecer el carácter de eco para ocultar la contraseña
-        int xPasswordField = xEspecialidadField;
-        int yPasswordField = yEspecialidadField + 40;
-        passwordField.setBounds(xPasswordField, yPasswordField, fieldWidth, fieldHeight);
-        passwordField.addActionListener(this);
-        this.add(passwordField);
-        
-        // ComboBox for gender
-        JLabel genderLabel = new JLabel("Género:");
-        int xGenderLabel = xPasswordLabel;
-        int yGenderLabel = yPasswordLabel + 40;
+        int xGenderLabel = xCodeLabel;
+        int yGenderLabel = yCodeLabel + 120; // Adjusted position
         genderLabel.setBounds(xGenderLabel, yGenderLabel, labelWidth, labelHeight);
         this.add(genderLabel);
 
         String[] genders = {"Masculino", "Femenino"};
         genderComboBox = new JComboBox<>(genders);
+        
         int xGenderComboBox = xGenderLabel + labelWidth;
         int yGenderComboBox = yGenderLabel;
         genderComboBox.setBounds(xGenderComboBox, yGenderComboBox, fieldWidth, fieldHeight);
         this.add(genderComboBox);
-        
-        //Telefono Lanbel
-        JLabel telefonoLabel = new JLabel("Teléfono:");
-        int xTelefonoLabel = xGenderLabel;
-        int yTelefonoLabel = yGenderLabel + 40;
+
+//Etiqueta para especialidad
+        JLabel especialidadLabel = new JLabel("Especialidad");
+        int xEspecialidadLabel = xCodeLabel;
+        int yEspecialidadLabel = yGenderLabel + 40; // Adjusted position
+        especialidadLabel.setBounds(xEspecialidadLabel, yEspecialidadLabel, labelWidth, labelHeight);
+        this.add(especialidadLabel);
+
+//Campo para la especialidad
+        especialidadField = new JTextField();
+        especialidadField.setText(especialidad);
+        int xEspecialidadField = xCodeField;
+        int yEspecialidadField = yEspecialidadLabel;
+        especialidadField.setBounds(xEspecialidadField, yEspecialidadField, fieldWidth, fieldHeight);
+        especialidadField.addActionListener(this);
+        this.add(especialidadField);
+
+//Telefono Lanbel
+        JLabel telefonoLabel = new JLabel("Teléfono");
+        int xTelefonoLabel = xCodeLabel;
+        int yTelefonoLabel = yEspecialidadLabel + 40; // Adjusted position
         telefonoLabel.setBounds(xTelefonoLabel, yTelefonoLabel, labelWidth, labelHeight);
         this.add(telefonoLabel);
-        
-        // Telefono Field
+
+// Telefono Field
         telefonoField = new JTextField();
-        int xTelefonoField = xGenderComboBox;
-        int yTelefonoField = yGenderComboBox + 40;
+        telefonoField.setText(telefono);
+        int xTelefonoField = xCodeField;
+        int yTelefonoField = yTelefonoLabel;
         telefonoField.setBounds(xTelefonoField, yTelefonoField, fieldWidth, fieldHeight);
         this.add(telefonoField);
-        
-        // Text field for edad
-        JLabel edadLabel = new JLabel("Edad:");
-        int xEdadLabel = xTelefonoLabel;
-        int yEdadLabel = yTelefonoLabel + 40;
+
+// Text field for edad
+        JLabel edadLabel = new JLabel("Edad");
+        int xEdadLabel = xCodeLabel;
+        int yEdadLabel = yTelefonoLabel + 40; // Adjusted position
         edadLabel.setBounds(xEdadLabel, yEdadLabel, labelWidth, labelHeight);
         this.add(edadLabel);
 
         edadField = new JTextField();
-        int xEdadField = xTelefonoField;
-        int yEdadField = yTelefonoField + 40;
+        edadField.setText(String.valueOf(edad));
+        int xEdadField = xCodeField;
+        int yEdadField = yEdadLabel;
         edadField.setBounds(xEdadField, yEdadField, fieldWidth, fieldHeight);
         this.add(edadField);
+
         
         // Button for registration
-        registerButton = new JButton("Actualizar Doctor");
+        actualizarButton = new JButton("Actualizar Doctor");
         int buttonWidth = 120;
         int buttonHeight = 30;
         int xRegisterButton = (frameWidth - buttonWidth) / 2;
         int yRegisterButton = yEdadLabel + 40;
-        registerButton.setBounds(xRegisterButton, yRegisterButton, buttonWidth, buttonHeight);
-        registerButton.addActionListener(this);
-        this.add(registerButton);
+        actualizarButton.setBounds(xRegisterButton, yRegisterButton, buttonWidth, buttonHeight);
+        actualizarButton.addActionListener(this);
+        this.add(actualizarButton);
 
         // Button for returning
         returnButton = new JButton("Regresar");
@@ -180,6 +199,13 @@ public class doctorUPDATE extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == actualizarButton) { // Verificar si se presionó el botón de registro
+        // Obtener el género seleccionado
+        String generoSeleccionado = (String) genderComboBox.getSelectedItem();
+        // Continuar con el proceso de actualización del doctor
+    }
+
+  
     }
     
     

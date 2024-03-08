@@ -146,6 +146,7 @@ public class doctorREGISTER extends JFrame implements ActionListener {
         edadField.setBounds(xEdadField, yEdadField, fieldWidth, fieldHeight);
         this.add(edadField);
 
+        //=======================================================================================
         // Button for registration
         registerButton = new JButton("Registrar Doctor");
         int buttonWidth = 120;
