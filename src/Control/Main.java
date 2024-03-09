@@ -4,6 +4,7 @@ import views.LOGIN;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.util.ArrayList;
 import javax.swing.UIManager;
+import views.vtnPACIENTE;
 
 
 public class Main{
@@ -31,7 +32,7 @@ public class Main{
         //----------------------------------------------------------------------------------------------
         
         // Creando una instancia de la vista LOGIN
-        LOGIN ventana_login = new LOGIN();
+        vtnPACIENTE ventana_login = new vtnPACIENTE();
     }
     //===============================================================================================
   

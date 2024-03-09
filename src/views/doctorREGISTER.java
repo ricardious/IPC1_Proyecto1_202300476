@@ -191,13 +191,14 @@ public class doctorREGISTER extends JFrame implements ActionListener {
             String telefono = telefonoField.getText();
             int edad = 0;    
             //=================================================================
-                    // Verificar que los campos obligatorios no estén vacíos
+            // Verificar que los campos obligatorios no estén vacíos
         if (nombres.isEmpty() || apellidos.isEmpty() || especialidad.isEmpty() || contrasenaChars.length == 0 || genero.isEmpty()) {
             // Mostrar un mensaje de error al usuario
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Campos Vacíos", JOptionPane.ERROR_MESSAGE);
             return; // Salir del método actionPerformed si hay campos obligatorios vacíos
         }    
             //============================================================================================================
+            
             
             try {
                 // Obtener el texto del campo de texto para la edad

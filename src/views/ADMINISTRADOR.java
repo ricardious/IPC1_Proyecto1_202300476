@@ -12,6 +12,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListener {
 
@@ -27,53 +32,49 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
     JButton logoutButton = new JButton();
 
     public ADMINISTRADOR() {
-        // ====================TAMAÑO DEL FRAME O VENTANA======================
+        //======================TAMAÑO DEL FRAME O VENTANA======================
         int frameWidth = 1000;
         int frameHeight = 600;
 
-        //--------------------------------------------------------
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        //======================================================================
+        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP); // Colocar las pestañas en la parte superior
 
-        //Crear las pestañas
+        //Crear las pestañas del administrador
         JPanel pest1 = new JPanel(null);
         JPanel pest2 = new JPanel(null);
-
         JPanel pest3 = new JPanel(null);
 
 
-        //-----------------------------------------------------------------------------------------------
-        // Tabla
+        //========================TABLA DOCTORES================================
+        // Tab
         String[] nombresColumnas = {"Código", "Nombre Completo", "Género", "Edad", "Especialidad", "Teléfono"};
 
         // Crear Tabla Jtable
         JTable tableDoctores = new JTable(Main.convertirDatosDoctor_Tabla(), nombresColumnas);
 
         JScrollPane scrollPane = new JScrollPane(tableDoctores);
-        //---------------------------------------------------------------------------------------------------
         // Dimensiones del JScrollPane
         int scrollPaneWidth = 600;
         int scrollPaneHeight = 400;
         // Calcular coordenadas x e y para centrar el JScrollPane dentro del panel pest1
-        int xScrollPane = (frameWidth - scrollPaneWidth) / 2 - 100;
+        int xScrollPane = (frameWidth - scrollPaneWidth) / 2 - 170;
         int yScrollPane = (frameHeight - scrollPaneHeight) / 2 - 40;
         scrollPane.setBounds(xScrollPane, yScrollPane, scrollPaneWidth, scrollPaneHeight);
         pest1.add(scrollPane);
-        //--------------------------------------------------------------------------------------------------------
+        //============================BOTONES===================================
+        //Parametros para los botones
         // Espacio entre la tabla y los botones
         int verticalSpacing = 20;
-
         // Coordenadas x para los botones, alineadas con el lado derecho de la tabla
         int xBotones = xScrollPane + scrollPaneWidth + verticalSpacing;
-
         // Coordenadas y iniciales para los botones
         int yBotones = yScrollPane;
-
         // Ancho y alto de los botones
         int buttonWidth = 150;
         int buttonHeight = 30;
-        //======================================================================================================
+        //======================================================================
 
-        //---------------------------Pestaña Doctores---------------------------
+        //===============================DOCTORES===============================
         //Boton crear doctores
         crearDoctor = new JButton("Crear Doctor");
         crearDoctor.setBounds(xBotones, yBotones, buttonWidth, buttonHeight);
@@ -96,8 +97,47 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         eliminarDoctor.setEnabled(true);
         eliminarDoctor.addActionListener(this);
         pest1.add(eliminarDoctor);
+        
+        
+        //Graficas
+        // Gráficas
+        // Estilos de graficas: http://www.java2s.com/Code/Java/Chart/CatalogChart.htm
+        // Insertar nuestra data (valor, "categoria", "Leyenda de la columna")
+        DefaultCategoryDataset datos = new DefaultCategoryDataset();
+        datos.setValue(80, "Especialista", "Pediatra");
+        datos.setValue(70, "Especialista", "Genecólogo");
+        datos.setValue(95, "Especialista", "Urólogo");
+        datos.setValue(30, "Especialista", "Cardiólogo");
 
-        //=======================================================================
+
+
+        // Instancear gráfica de barras 3D
+        JFreeChart grafico_barras = ChartFactory.createBarChart3D(
+            "Especialidades", // Nombre del grafico
+            "Especialidades", // Nombre de las barras o columnas
+            "Porcentaje", // Nombre de la numeracion
+            datos, // Datos del grafico
+            PlotOrientation.VERTICAL, // Orientacion
+            true, // Leyenda de barras individuales por color
+            true, // Herramientas
+            false // Url del grafico
+        );
+        
+        // Creación de un ChartPanel el cual almacenará nuestro gráfico
+        ChartPanel cPanel = new ChartPanel(grafico_barras);
+        // Habilitamos es scroll
+        cPanel.setMouseWheelEnabled(true);
+        // Asignamos la posición y las dimensiones de nuestro ChartPanel
+        yBotones += buttonHeight + verticalSpacing;
+        cPanel.setBounds(xBotones, yBotones, 300, 200);
+        // Agregamos a nuestra pestaña el ChartPanel con nuestro gráfico
+        pest1.add(cPanel);
+
+        
+        //======================================================================
+        
+        
+        
         //--------------------------Table pacientes-----------------------------------------
         String[] pacientesColumnas = {"Código", "Nombre Completo", "Género", "Edad"};
 
@@ -172,7 +212,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         pest3.add(eliminarProducto);
         //=========================================================================================================
 //        tabbedPane.setTabComponentAt(100, pest1);
-        logoutButton.addActionListener(this);
+
         getContentPane().add(tabbedPane);
 
         tabbedPane.addTab("Doctores", pest1);
@@ -182,6 +222,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
 
         tabbedPane.getSelectedIndex();
 
+        //====================================================================================
         //------------Creando JFrame------------------
 //        this.setExtendedState(MAXIMIZED_BOTH);  // Hacer que la ventana se abra maximizada
         this.setTitle("Administrador"); // TITULO DE LA VENTANA
@@ -215,7 +256,10 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
             JOptionPane.showMessageDialog(this, "Código de doctor inválido", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-}
+}   if (e.getSource() == crearPaciente) {
+            this.dispose();
+            REGISTER vtn_register = new REGISTER();
+        }
 
 
     }

@@ -165,7 +165,7 @@ public class REGISTER extends JFrame implements ActionListener {
         }    
             //=================================================================            
             
-                        try {
+            try {
                 // Obtener el texto del campo de texto para la edad
                 String edadTexto = edadField.getText();
 
