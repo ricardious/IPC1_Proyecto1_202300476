@@ -1,6 +1,6 @@
 package views;
 
-import Control.Main;
+import controlador.Main;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -186,13 +186,13 @@ public class doctorREGISTER extends JFrame implements ActionListener {
             String especialidad = especialidadField.getText();
             // Convertir el array de caracteres de la contraseña a una cadena
             char[] contrasenaChars = passwordField.getPassword();
-            String pwd = new String(contrasenaChars);
+            String password = new String(contrasenaChars);
             String genero = (String) genderComboBox.getSelectedItem();
             String telefono = telefonoField.getText();
             int edad = 0;    
             //=================================================================
             // Verificar que los campos obligatorios no estén vacíos
-        if (nombres.isEmpty() || apellidos.isEmpty() || especialidad.isEmpty() || contrasenaChars.length == 0 || genero.isEmpty()) {
+        if (nombres.isEmpty() || apellidos.isEmpty() || especialidad.isEmpty() || contrasenaChars.length == 0 || genero.isEmpty() || password.isEmpty()) {
             // Mostrar un mensaje de error al usuario
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Campos Vacíos", JOptionPane.ERROR_MESSAGE);
             return; // Salir del método actionPerformed si hay campos obligatorios vacíos
@@ -224,7 +224,7 @@ public class doctorREGISTER extends JFrame implements ActionListener {
             //JOptionPane.showMessageDialog(this, "Su codigo es: " + Main.codigoDoctor,"Codigo", JOptionPane.WARNING_MESSAGE);
 
         // Agregar el doctor solo si todos los campos obligatorios están llenos
-        Main.agregarDoctor(Main.codigoDoctor, nombres, apellidos, genero, edad, especialidad, telefono);
+        Main.agregarDoctor(Main.codigoDoctor, nombres, apellidos, password, genero, edad, especialidad, telefono);
         Main.codigoDoctor++;
         
         
@@ -235,7 +235,12 @@ public class doctorREGISTER extends JFrame implements ActionListener {
         
         // Si necesitas hacer algo con la contraseña, puedes hacerlo aquí
         // Nota: contraseña es una variable local en este bloque if y no puede ser accedida fuera de este bloque
-        } 
+        } else if (e.getSource() == returnButton) {
+    this.dispose();
+    ADMINISTRADOR admin = new ADMINISTRADOR();
+    }
+}
+
     }
 
-}
+

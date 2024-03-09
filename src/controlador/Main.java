@@ -1,9 +1,16 @@
-package Control;
+package controlador;
 
+import modelo.DOCTOR;
+import modelo.PRODUCTO;
+import modelo.PACIENTE;
 import views.LOGIN;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.util.ArrayList;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
+import views.ADMINISTRADOR;
+import views.doctorREGISTER;
+import views.doctorUPDATE;
 import views.vtnPACIENTE;
 
 
@@ -32,7 +39,7 @@ public class Main{
         //----------------------------------------------------------------------------------------------
         
         // Creando una instancia de la vista LOGIN
-        vtnPACIENTE ventana_login = new vtnPACIENTE();
+        LOGIN ventana_login = new LOGIN();
     }
     //===============================================================================================
   
@@ -81,10 +88,33 @@ public class Main{
     }
     
      // Método para agregar un nuevo médico a la lista
-    public static void agregarDoctor(int codigo, String nombres, String apellidos, String genero, int edad, String especialidad, String telefono){
-        listaDoctores.add(new DOCTOR(codigo, nombres, apellidos, genero, edad, especialidad, telefono)); // Creando una nueva instancia de la clase DOCTOR y añadiéndola a la lista
+    public static void agregarDoctor(int codigo, String nombres, String apellidos, String password, String genero, int edad, String especialidad, String telefono){
+        listaDoctores.add(new DOCTOR(codigo, nombres, apellidos, password, genero, edad, especialidad, telefono)); // Creando una nueva instancia de la clase DOCTOR y añadiéndola a la lista
     }
     
+    
+    public static void  actualizarDoctor(int codigo, String nombres, String apellidos, String password, String genero, int edad, String especialidad, String telefono) {
+        
+        for (DOCTOR doctor : listaDoctores) {
+            if (doctor.getCodigo() == codigo) {
+                // Actualizar los datos del doctor
+                doctor.setNombres(nombres);
+                doctor.setApellidos(apellidos);
+                doctor.setPassword(password);
+                doctor.setGenero(genero);
+                doctor.setEdad(edad);
+                doctor.setEspecialidad(especialidad);
+                doctor.setTelefono(telefono);
+                break; // Salir del bucle una vez que se actualiza el doctor
+            }
+        }
+    }
+
+
+        
+    
+    
+
     //============================================================================================================
     // Método para convertir datos de productos en un formato de tabla
         public static Object[][] convertirDatosProductos_Tabla() {
@@ -108,6 +138,7 @@ public class Main{
         listaProductos.add(new PRODUCTO(code, nombre, cantidad, descripcion, precio)); // Creando una nueva instancia de la clase PRODUCTO y añadiéndola a la lista
     }
     
+    
     public static boolean existeDoctor(int codigo) {
     for (DOCTOR doctor : listaDoctores) {
         if (doctor.getCodigo() == codigo) {
@@ -117,6 +148,7 @@ public class Main{
     return false; // El doctor no existe
 }
 
+    
     public static DOCTOR obtenerDoctorPorCodigo(int codigo) {
     for (DOCTOR doctor : listaDoctores) {
         if (doctor.getCodigo() == codigo) {
@@ -126,5 +158,6 @@ public class Main{
     return null; // Si no se encuentra ningún doctor con el código proporcionado, devuelve null
 }
     
+
     
 }

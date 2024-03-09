@@ -4,14 +4,15 @@ package views;
  *
  * @author Ricardious
  */
-import Control.DOCTOR;
-import Control.Main;
-
+import modelo.DOCTOR;
+import controlador.Main;
+import static controlador.Main.convertirDatosDoctor_Tabla;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -20,6 +21,10 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListener {
 
+
+
+
+    
     JButton crearDoctor = new JButton();
     JButton actualizarDoctor = new JButton();
     JButton eliminarDoctor = new JButton();
@@ -30,8 +35,10 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
     JButton actualizarProducto = new JButton();
     JButton eliminarProducto = new JButton();
     JButton logoutButton = new JButton();
+    public static JTable tableDoctores = new JTable();
 
     public ADMINISTRADOR() {
+        
         //======================TAMAÑO DEL FRAME O VENTANA======================
         int frameWidth = 1000;
         int frameHeight = 600;
@@ -50,7 +57,10 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         String[] nombresColumnas = {"Código", "Nombre Completo", "Género", "Edad", "Especialidad", "Teléfono"};
 
         // Crear Tabla Jtable
-        JTable tableDoctores = new JTable(Main.convertirDatosDoctor_Tabla(), nombresColumnas);
+        tableDoctores = new JTable(Main.convertirDatosDoctor_Tabla(), nombresColumnas);
+        // En algún lugar donde tengas acceso a tableDoctores
+
+
 
         JScrollPane scrollPane = new JScrollPane(tableDoctores);
         // Dimensiones del JScrollPane
@@ -134,6 +144,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         pest1.add(cPanel);
 
         
+        
         //======================================================================
         
         
@@ -175,7 +186,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         pest2.add(eliminarPaciente);
 
         //==============================================================================================
-        //--------------------------Table pacientes-----------------------------------------
+        //--------------------------Table productos-----------------------------------------
         String[] productosColumnas = {"Código", "Nombre", "Cantidad", "Descripción", "Precio"};
 
         JTable tableProductos = new JTable(Main.convertirDatosProductos_Tabla(), productosColumnas);
@@ -241,24 +252,31 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
             doctorREGISTER vtn_login = new doctorREGISTER();
 
         } else if (e.getSource() == actualizarDoctor) {
+            
     String codigoDoctorString = JOptionPane.showInputDialog(this, "Ingrese el código del doctor a actualizar:");
     if (codigoDoctorString != null && !codigoDoctorString.isEmpty()) {
         try {
             int codigoDoctor = Integer.parseInt(codigoDoctorString);
             DOCTOR doctor = Main.obtenerDoctorPorCodigo(codigoDoctor);
+            
             if (doctor != null) {
                 // Crear una instancia de la ventana doctorUPDATE con los datos del doctor
-                doctorUPDATE ventanaUpdate = new doctorUPDATE(doctor.getCodigo(), doctor.getNombres(), doctor.getApellidos(), doctor.getGenero(), doctor.getEdad(), doctor.getEspecialidad(), doctor.getTelefono());
+                doctorUPDATE ventanaUpdate = new doctorUPDATE(doctor.getCodigo(), doctor.getNombres(), doctor.getApellidos(), doctor.getPassword(), doctor.getGenero(), doctor.getEdad(), doctor.getEspecialidad(), doctor.getTelefono());
             } else {
                 JOptionPane.showMessageDialog(this, "El doctor con el código ingresado no existe", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Código de doctor inválido", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        this.dispose();
     }
 }   if (e.getSource() == crearPaciente) {
             this.dispose();
             REGISTER vtn_register = new REGISTER();
+        } else if (e.getSource() == crearProducto){
+        this.dispose();
+        vtnPRODUCTO vtn_producto = new vtnPRODUCTO();
+            
         }
 
 
@@ -273,5 +291,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
     public void focusLost(FocusEvent e) {
 
     }
+
+    // En la clase ADMINISTRADOR
 
 }

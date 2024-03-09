@@ -1,4 +1,4 @@
-package Control;
+package modelo;
 
 /**
  *
@@ -8,15 +8,17 @@ public class DOCTOR {
     private int codigo;
     private String nombres;
     private String apellidos;
+    private String password;
     private String genero;
     private int edad;
     private String especialidad;
     private String telefono;
 
-    public DOCTOR(int codigo, String nombres, String apellidos, String genero, int edad, String especialidad, String telefono) {
+    public DOCTOR(int codigo, String nombres, String apellidos, String password, String genero, int edad, String especialidad, String telefono) {
         this.codigo = codigo;
         this.nombres = nombres;
         this.apellidos = apellidos;
+        this.password = password;
         this.genero = genero;
         this.edad = edad;
         this.especialidad = especialidad;
@@ -63,6 +65,20 @@ public class DOCTOR {
      */
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**
@@ -120,7 +136,6 @@ public class DOCTOR {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
 
 
     

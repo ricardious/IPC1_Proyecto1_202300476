@@ -1,5 +1,7 @@
 package views;
 
+import modelo.DOCTOR;
+import controlador.Main;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -35,11 +38,11 @@ public String obtenerGeneroSeleccionado() {
 }
 
 
-    public doctorUPDATE(int codigo, String nombres, String apellidos, String genero, int edad, String especialidad, String telefono) {
+    public doctorUPDATE(int codigo, String nombres, String apellidos, String password, String genero, int edad, String especialidad, String telefono) {
 
 // Frame dimensions
         int frameWidth = 700;
-        int frameHeight = 500;
+        int frameHeight = 550;
 
 //--------------------Registro Doctor----------------------------
 // Label "Registro Doctor"
@@ -59,7 +62,6 @@ public String obtenerGeneroSeleccionado() {
         int yCodeLabel = yTitleLabel + 50;
         codeLabel.setBounds(xCodeLabel, yCodeLabel, labelWidth, labelHeight);
         this.add(codeLabel);
-        
 
 //Field code
         codeField = new JTextField();
@@ -70,13 +72,14 @@ public String obtenerGeneroSeleccionado() {
         int yCodeField = yCodeLabel;
         codeField.setBounds(xCodeField, yCodeField, fieldWidth, fieldHeight);
         codeField.setEnabled(false);
+        codeField.addActionListener(this);
         this.add(codeField);
-        
-        // Label nombres
+
+// Label nombres
         JLabel nombresLabel = new JLabel("Nombres");
-        
+
         int xFirstNameLabel = xCodeLabel;
-        int yFirstNameLabel = yCodeLabel + 40; // Adjusted position
+        int yFirstNameLabel = yCodeField + 40; // Adjusted position
         nombresLabel.setBounds(xFirstNameLabel, yFirstNameLabel, labelWidth, labelHeight);
         this.add(nombresLabel);
 
@@ -91,7 +94,7 @@ public String obtenerGeneroSeleccionado() {
 // Label apellidos
         JLabel apellidosLabel = new JLabel("Apellidos");
         int xLastNameLabel = xCodeLabel;
-        int yLastNameLabel = yFirstNameLabel + 40; // Adjusted position
+        int yLastNameLabel = yFirstNameField + 40; // Adjusted position
         apellidosLabel.setBounds(xLastNameLabel, yLastNameLabel, labelWidth, labelHeight);
         this.add(apellidosLabel);
 
@@ -103,18 +106,34 @@ public String obtenerGeneroSeleccionado() {
         apellidosField.setBounds(xLastNameField, yLastNameField, fieldWidth, fieldHeight);
         this.add(apellidosField);
 
+//Etiqueta para la contraseña
+        JLabel passwordLabel = new JLabel("Contraseña*");
+        int xPasswordLabel = xCodeLabel;
+        int yPasswordLabel = yLastNameField + 40; // Adjusted position
+        passwordLabel.setBounds(xPasswordLabel, yPasswordLabel, labelWidth, labelHeight);
+        this.add(passwordLabel);
+
+//Campo para la contraseña
+        passwordField = new JPasswordField();
+        passwordField.setEchoChar((char) 0);// Establecer el carácter de eco para ocultar la contraseña
+        passwordField.setText(password);
+        int xPasswordField = xCodeField;
+        int yPasswordField = yPasswordLabel;
+        passwordField.setBounds(xPasswordField, yPasswordField, fieldWidth, fieldHeight);
+        passwordField.addActionListener(this);
+        this.add(passwordField);
 
 // ComboBox for gender
         JLabel genderLabel = new JLabel("Género");
-        
+
         int xGenderLabel = xCodeLabel;
-        int yGenderLabel = yCodeLabel + 120; // Adjusted position
+        int yGenderLabel = yPasswordField + 40; // Adjusted position
         genderLabel.setBounds(xGenderLabel, yGenderLabel, labelWidth, labelHeight);
         this.add(genderLabel);
 
         String[] genders = {"Masculino", "Femenino"};
         genderComboBox = new JComboBox<>(genders);
-        
+
         int xGenderComboBox = xGenderLabel + labelWidth;
         int yGenderComboBox = yGenderLabel;
         genderComboBox.setBounds(xGenderComboBox, yGenderComboBox, fieldWidth, fieldHeight);
@@ -139,7 +158,7 @@ public String obtenerGeneroSeleccionado() {
 //Telefono Lanbel
         JLabel telefonoLabel = new JLabel("Teléfono");
         int xTelefonoLabel = xCodeLabel;
-        int yTelefonoLabel = yEspecialidadLabel + 40; // Adjusted position
+        int yTelefonoLabel = yEspecialidadField + 40; // Adjusted position
         telefonoLabel.setBounds(xTelefonoLabel, yTelefonoLabel, labelWidth, labelHeight);
         this.add(telefonoLabel);
 
@@ -154,7 +173,7 @@ public String obtenerGeneroSeleccionado() {
 // Text field for edad
         JLabel edadLabel = new JLabel("Edad");
         int xEdadLabel = xCodeLabel;
-        int yEdadLabel = yTelefonoLabel + 40; // Adjusted position
+        int yEdadLabel = yTelefonoField + 40; // Adjusted position
         edadLabel.setBounds(xEdadLabel, yEdadLabel, labelWidth, labelHeight);
         this.add(edadLabel);
 
@@ -164,6 +183,7 @@ public String obtenerGeneroSeleccionado() {
         int yEdadField = yEdadLabel;
         edadField.setBounds(xEdadField, yEdadField, fieldWidth, fieldHeight);
         this.add(edadField);
+
 
         
         // Button for registration
@@ -197,16 +217,37 @@ public String obtenerGeneroSeleccionado() {
         
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == actualizarButton) { // Verificar si se presionó el botón de registro
-        // Obtener el género seleccionado
-        String generoSeleccionado = (String) genderComboBox.getSelectedItem();
-        // Continuar con el proceso de actualización del doctor
-    }
+@Override
+public void actionPerformed(ActionEvent e) {
+    
+    if (e.getSource() == actualizarButton) { // Verificar si se presionó el botón de actualizar
+//         Obtener los datos del doctor de los campos de texto
+        int codigo = Integer.parseInt(codeField.getText());
+        String nombres = nombresField.getText();
+        String apellidos = apellidosField.getText();
+        String password = new String(passwordField.getPassword()); // Obtener la contraseña del campo de contraseña
+        String genero = (String) genderComboBox.getSelectedItem();
+        int edad = Integer.parseInt(edadField.getText());
+        String especialidad = especialidadField.getText();
+        String telefono = telefonoField.getText();
 
-  
+        Main.listaDoctores.remove(codigo-1000);
+
+        DOCTOR doctor = new DOCTOR(codigo, nombres, apellidos, password, genero, edad, especialidad, telefono);
+        Main.listaDoctores.add(doctor);
+//         Cerrar la ventana de actualización
+         
+        
+        
+        this.dispose();
+        ADMINISTRADOR admin = new ADMINISTRADOR();
+    } else if (e.getSource() == returnButton) {
+    this.dispose();
+    ADMINISTRADOR admin = new ADMINISTRADOR();
     }
+}
+
+
     
     
 }

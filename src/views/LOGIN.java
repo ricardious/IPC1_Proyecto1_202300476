@@ -5,6 +5,7 @@ package views;
  * @author Ricardious
  */
 
+import controlador.Main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import javax.swing.*;
+import modelo.DOCTOR;
+import modelo.PACIENTE;
 
 
 public class LOGIN extends JFrame implements ActionListener, FocusListener{
@@ -193,15 +196,11 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
     }
 
     //------------------------------------------Eventos------------------------------------------
+// Dentro del método actionPerformed en la clase LOGIN
     @Override
     public void actionPerformed(ActionEvent Ae) {
-        // Verificar el estado del botón de ver contraseña
         if (Ae.getSource() == toggleButton) {
-            if (toggleButton.isSelected()) {
-                passwordField.setEchoChar((char) 0); // Mostrar contraseña
-            } else {
-                passwordField.setEchoChar('\u25CF'); // Ocultar contraseña
-            }  
+            // Lógica para mostrar u ocultar la contraseña
         } else if (Ae.getSource() == loginButton) {
             String username = usernameField.getText();
             char[] password = passwordField.getPassword();
@@ -209,20 +208,53 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
 
             System.out.println("Usuario: " + username);
             System.out.println("Password: " + pwd);
-            
+
+            boolean loginSuccessful = false;
+
+            // Validar el inicio de sesión para el administrador
             if (username.equals("202300476") && pwd.equals("proyecto1IPC1")) {
+                loginSuccessful = true;
+                // Iniciar sesión como administrador
                 ADMINISTRADOR ventana_admin = new ADMINISTRADOR();
                 System.out.println("Welcome admin");
-                this.dispose();
+                this.dispose(); // Cerrar la ventana de inicio de sesión
             } else {
-                JOptionPane.showMessageDialog(this, "User and/or password incorrect.", "Error con el LOGIN", 0);
+                // Iterar sobre la lista de pacientes para validar el inicio de sesión
+                for (PACIENTE paciente : Main.listaPacientes) {
+                    if (Integer.toString(paciente.getCode()).equals(username) && paciente.getContrasena().equals(pwd)) {
+                        loginSuccessful = true;
+                        vtnPACIENTE vtn_pacientes = new vtnPACIENTE();
+                        break;
+                    }
+                }
+
+                // Si no se inicia sesión como paciente, intentar iniciar sesión como doctor
+                if (!loginSuccessful) {
+                    // Iterar sobre la lista de doctores para validar el inicio de sesión
+                    for (DOCTOR doctor : Main.listaDoctores) {
+                        if (Integer.toString(doctor.getCodigo()).equals(username) && doctor.getPassword().equals(pwd)) {
+                            loginSuccessful = true;
+                            // Iniciar sesión como doctor
+                            // Por ejemplo:
+                            // DOCTOR_WINDOW doctorWindow = new DOCTOR_WINDOW();
+                            // doctorWindow.setVisible(true);
+                            // this.dispose();
+                            break;
+                        }
+                    }
+                }
             }
-        } else if (Ae.getSource() == registerButton) {
-                REGISTER ventana_register = new REGISTER();
-                this.dispose();
+        
+        if (!loginSuccessful) {
+            // Mostrar mensaje de error si las credenciales son incorrectas
+            JOptionPane.showMessageDialog(this, "Usuario y/o contraseña incorrectos.", "Error con el inicio de sesión", JOptionPane.ERROR_MESSAGE);
         }
-        System.out.println("================================================");
+    } else if (Ae.getSource() == registerButton) {
+        REGISTER ventana_register = new REGISTER();
+        this.dispose();
     }
+    System.out.println("================================================");
+}
 
     @Override
     public void focusGained(FocusEvent e) {

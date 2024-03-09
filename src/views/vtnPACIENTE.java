@@ -1,6 +1,7 @@
 package views;
 
-import Control.PACIENTE;
+import modelo.PACIENTE;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,20 +32,28 @@ public class vtnPACIENTE extends JFrame implements  ActionListener {
         
         
         //======================================================================
-        JLabel labelArea = new JLabel();
+
         JTextArea textArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textArea);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         // Dimensiones del JScrollPane
-        int scrollPaneWidth = 600;
-        int scrollPaneHeight = 400;
-        
+        int scrollPaneWidth = 800;
+        int scrollPaneHeight = 150;
+
         int xScrollPane = (frameWidth - scrollPaneWidth) / 2;
-        int yScrollPane = (frameHeight - scrollPaneHeight) / 2;
-        
+        int yScrollPane = (frameHeight - scrollPaneHeight) / 2 - 150;
+
         scrollPane.setBounds(xScrollPane, yScrollPane, scrollPaneWidth, scrollPaneHeight);
         pest1.add(scrollPane);
+
+        JLabel labelArea = new JLabel("Motivo de la Cita");
+        int titleLabelWidth = labelArea.getPreferredSize().width;
+        int xTitleLabel = (frameWidth - titleLabelWidth) / 2;
+        int yTitleLabel = yScrollPane - 30; // Posición vertical ajustada para que esté sobre el campo de texto
+        labelArea.setBounds(xTitleLabel, yTitleLabel, titleLabelWidth, labelArea.getPreferredSize().height);
+        pest1.add(labelArea);
+
 
         //======================================================================
         //------------Creando JFrame------------------
@@ -58,9 +67,9 @@ public class vtnPACIENTE extends JFrame implements  ActionListener {
         
         getContentPane().add(tabbedPane);
 
-        tabbedPane.addTab("Doctores", pest1);
-        tabbedPane.addTab("Pacientes", pest2);
-        tabbedPane.addTab("Productos", pest3);
+        tabbedPane.addTab("Solicitar Cita", pest1);
+        tabbedPane.addTab("Ver Estado de Cita", pest2);
+        tabbedPane.addTab("Farmacia", pest3);
 
 
         tabbedPane.getSelectedIndex();

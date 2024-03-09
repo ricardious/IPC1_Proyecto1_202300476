@@ -4,7 +4,7 @@ package views;
  *
  * @author Ricardious
  */
-import Control.Main;
+import controlador.Main;
 import javax.swing.*;
 import java.awt.*;
 
