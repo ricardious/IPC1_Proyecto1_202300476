@@ -85,7 +85,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
         this.add(usernameLabel);
 
         // CAMPO DE TEXTO PARA EL USER
-        usernameField = new JTextField("202300476");
+        usernameField = new JTextField("");
         // TAMAÑO DEL CAMPO DE TEXTO
         int fieldWidth = 260;
         int fieldHeight = 25;
@@ -112,7 +112,7 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
 
         
         // CAMPO DE CONTRASEÑA
-        passwordField = new JPasswordField("proyecto1IPC1");
+        passwordField = new JPasswordField("");
         passwordField.setEchoChar('\u25CF');// Establecer el carácter de eco para ocultar la contraseña
         // DIMENSIONES - POSX, POSY, TAMX, TAMY
         passwordField.setBounds(xField, yPasswordField, fieldWidth, fieldHeight);
