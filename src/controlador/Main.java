@@ -3,9 +3,12 @@ package controlador;
 import modelo.DOCTOR;
 import modelo.PRODUCTO;
 import modelo.PACIENTE;
+import modelo.CITA;
+import modelo.HORARIO;
 import views.LOGIN;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import views.ADMINISTRADOR;
@@ -19,11 +22,14 @@ public class Main{
     public static ArrayList<DOCTOR> listaDoctores = new ArrayList<>();
     public static ArrayList<PACIENTE> listaPacientes = new ArrayList<>();
     public static ArrayList<PRODUCTO> listaProductos = new ArrayList<>();
+    public static ArrayList<HORARIO> listaHorarios = new ArrayList<>();
+    public static ArrayList<CITA> listaCitas = new ArrayList<>();
     
     // Códigos iniciales para pacientes, médicos y productos
     public static int codigoPaciente = 202400000;
     public static int codigoDoctor = 1000;
-    public static int codigoProducto;
+    public static int codigoProducto = 1;
+    public static int numeroCita = 1;
     
     // Método principal
     public static void main(String[] args){ 
@@ -157,6 +163,72 @@ public class Main{
     }
     return null; // Si no se encuentra ningún doctor con el código proporcionado, devuelve null
 }
+
+    public static PACIENTE obtenerPacientePorCodigo(int codigo) {
+        for (PACIENTE paciente : listaPacientes) if (paciente.getCode() == codigo) return paciente;
+        return null;
+    }
+
+    public static PRODUCTO obtenerProductoPorCodigo(int codigo) {
+        for (PRODUCTO producto : listaProductos) if (producto.getCode() == codigo) return producto;
+        return null;
+    }
+
+    public static boolean tieneCitaPendiente(int codigoPaciente) {
+        for (CITA cita : listaCitas) {
+            if (cita.getCodigoPaciente() == codigoPaciente && cita.getEstado() == CITA.Estado.PENDIENTE) return true;
+        }
+        return false;
+    }
+
+    public static boolean horarioDisponible(int codigoDoctor, LocalDateTime fechaHora) {
+        if (fechaHora == null || !fechaHora.isAfter(LocalDateTime.now())) return false;
+        boolean publicado = false;
+        for (HORARIO horario : listaHorarios) {
+            if (horario.getCodigoDoctor() == codigoDoctor && horario.getFechaHora().equals(fechaHora)) publicado = true;
+        }
+        if (!publicado) return false;
+        for (CITA cita : listaCitas) {
+            if (cita.getCodigoDoctor() == codigoDoctor && cita.getFechaHora().equals(fechaHora)
+                    && cita.getEstado() == CITA.Estado.PENDIENTE) return false;
+        }
+        return true;
+    }
+
+    public static void publicarHorario(DOCTOR doctor, LocalDateTime fechaHora) {
+        if (doctor == null || fechaHora == null || !fechaHora.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("El horario debe ser una fecha futura válida.");
+        }
+        for (HORARIO horario : listaHorarios) {
+            if (horario.getCodigoDoctor() == doctor.getCodigo() && horario.getFechaHora().equals(fechaHora)) {
+                throw new IllegalArgumentException("Ese horario ya está publicado.");
+            }
+        }
+        listaHorarios.add(new HORARIO(doctor.getCodigo(), fechaHora));
+    }
+
+    public static CITA solicitarCita(PACIENTE paciente, DOCTOR doctor, LocalDateTime fechaHora, String motivo) {
+        if (paciente == null || doctor == null || motivo == null || motivo.isBlank()) {
+            throw new IllegalArgumentException("Seleccione doctor, horario y escriba el motivo.");
+        }
+        if (tieneCitaPendiente(paciente.getCode())) {
+            throw new IllegalArgumentException("Ya tiene una cita pendiente.");
+        }
+        if (!horarioDisponible(doctor.getCodigo(), fechaHora)) {
+            throw new IllegalArgumentException("El horario ya no está disponible.");
+        }
+        CITA cita = new CITA(numeroCita++, paciente.getCode(), doctor.getCodigo(), fechaHora, motivo.trim());
+        listaCitas.add(cita);
+        return cita;
+    }
+
+    public static void cambiarEstadoCita(CITA cita, DOCTOR doctor, CITA.Estado nuevoEstado) {
+        if (cita == null || doctor == null || cita.getCodigoDoctor() != doctor.getCodigo()
+                || cita.getEstado() != CITA.Estado.PENDIENTE || nuevoEstado == CITA.Estado.PENDIENTE) {
+            throw new IllegalArgumentException("No se puede modificar esta cita.");
+        }
+        cita.setEstado(nuevoEstado);
+    }
     
 
     

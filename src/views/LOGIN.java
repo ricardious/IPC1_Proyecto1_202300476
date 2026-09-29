@@ -200,14 +200,11 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
     @Override
     public void actionPerformed(ActionEvent Ae) {
         if (Ae.getSource() == toggleButton) {
-            // Lógica para mostrar u ocultar la contraseña
+            passwordField.setEchoChar(toggleButton.isSelected() ? (char) 0 : '\u25CF');
         } else if (Ae.getSource() == loginButton) {
             String username = usernameField.getText();
             char[] password = passwordField.getPassword();
             String pwd = new String(password);
-
-            System.out.println("Usuario: " + username);
-            System.out.println("Password: " + pwd);
 
             boolean loginSuccessful = false;
 
@@ -216,14 +213,14 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
                 loginSuccessful = true;
                 // Iniciar sesión como administrador
                 ADMINISTRADOR ventana_admin = new ADMINISTRADOR();
-                System.out.println("Welcome admin");
                 this.dispose(); // Cerrar la ventana de inicio de sesión
             } else {
                 // Iterar sobre la lista de pacientes para validar el inicio de sesión
                 for (PACIENTE paciente : Main.listaPacientes) {
                     if (Integer.toString(paciente.getCode()).equals(username) && paciente.getContrasena().equals(pwd)) {
                         loginSuccessful = true;
-                        vtnPACIENTE vtn_pacientes = new vtnPACIENTE();
+                        new vtnPACIENTE(paciente);
+                        this.dispose();
                         break;
                     }
                 }
@@ -234,11 +231,8 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
                     for (DOCTOR doctor : Main.listaDoctores) {
                         if (Integer.toString(doctor.getCodigo()).equals(username) && doctor.getPassword().equals(pwd)) {
                             loginSuccessful = true;
-                            // Iniciar sesión como doctor
-                            // Por ejemplo:
-                            // DOCTOR_WINDOW doctorWindow = new DOCTOR_WINDOW();
-                            // doctorWindow.setVisible(true);
-                            // this.dispose();
+                            new vtnDOCTOR(doctor);
+                            this.dispose();
                             break;
                         }
                     }
@@ -253,7 +247,6 @@ public class LOGIN extends JFrame implements ActionListener, FocusListener{
         REGISTER ventana_register = new REGISTER();
         this.dispose();
     }
-    System.out.println("================================================");
 }
 
     @Override
