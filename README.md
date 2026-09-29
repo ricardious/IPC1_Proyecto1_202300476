@@ -22,4 +22,4 @@ The administrator credentials specified by the assignment are code `202300476` a
 
 Data lives in memory for the current run. The assignment does not require a database or disk persistence.
 
-The original NetBeans metadata remains in `nbproject/`, but its old dependency paths reference Windows machines. Maven is the portable build path. The generated manuals are [technical](output/pdf/Manual_Tecnico.pdf) and [user](output/pdf/Manual_Usuario.pdf); their editable generator is [`docs/build_manuals.py`](docs/build_manuals.py).
+The original NetBeans metadata remains in `nbproject/`, but its old dependency paths reference Windows machines. Maven is the portable build path. The finished manuals are [technical](output/pdf/Manual_Tecnico.pdf) and [user](output/pdf/Manual_Usuario.pdf).
