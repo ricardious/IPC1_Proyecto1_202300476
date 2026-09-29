@@ -106,7 +106,8 @@ public class vtnPACIENTE extends JFrame {
         doctores.removeAllItems();
         for (DOCTOR doctor : Main.listaDoctores)
             if (doctor.getEspecialidad().equals(especialidades.getSelectedItem())) doctores.addItem(doctor);
-        if (seleccionado != null) doctores.setSelectedItem(seleccionado);
+        if (seleccionado != null && seleccionado.getEspecialidad().equals(especialidades.getSelectedItem()))
+            doctores.setSelectedItem(seleccionado);
         actualizarHorarios();
     }
 

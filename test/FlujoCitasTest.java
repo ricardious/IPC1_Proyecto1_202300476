@@ -3,31 +3,60 @@ import java.time.LocalDateTime;
 import modelo.CITA;
 import modelo.DOCTOR;
 import modelo.PACIENTE;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /** Prueba ejecutable sin dependencias de test externas. */
 public class FlujoCitasTest {
-    public static void main(String[] args) {
+    @BeforeEach
+    void limpiar() {
+        Main.listaDoctores.clear();
+        Main.listaPacientes.clear();
+        Main.listaProductos.clear();
+        Main.listaHorarios.clear();
+        Main.listaCitas.clear();
+        Main.numeroCita = 1;
+    }
+
+    @Test
+    void reservaBloqueoYAtencion() {
         DOCTOR doctor = new DOCTOR(1000, "Ana", "López", "clave", "Femenino", 35, "Pediatría", "");
         PACIENTE paciente = new PACIENTE("Luis", "Pérez", "clave", "Masculino", 22, 202400000);
         Main.listaDoctores.add(doctor);
         Main.listaPacientes.add(paciente);
         LocalDateTime hora = LocalDateTime.now().plusDays(1).withSecond(0).withNano(0);
         Main.publicarHorario(doctor, hora);
-        assert Main.horarioDisponible(doctor.getCodigo(), hora);
+        assertTrue(Main.horarioDisponible(doctor.getCodigo(), hora));
         CITA cita = Main.solicitarCita(paciente, doctor, hora, "Consulta general");
-        assert cita.getEstado() == CITA.Estado.PENDIENTE;
-        assert Main.tieneCitaPendiente(paciente.getCode());
-        assert !Main.horarioDisponible(doctor.getCodigo(), hora);
-        try {
-            Main.solicitarCita(paciente, doctor, hora, "Duplicada");
-            throw new AssertionError("Se aceptó una segunda cita pendiente");
-        } catch (IllegalArgumentException esperado) { }
+        assertEquals(CITA.Estado.PENDIENTE, cita.getEstado());
+        assertTrue(Main.tieneCitaPendiente(paciente.getCode()));
+        assertFalse(Main.horarioDisponible(doctor.getCodigo(), hora));
+        assertThrows(IllegalArgumentException.class,
+                () -> Main.solicitarCita(paciente, doctor, hora, "Duplicada"));
         Main.cambiarEstadoCita(cita, doctor, CITA.Estado.COMPLETADA);
-        assert !Main.tieneCitaPendiente(paciente.getCode());
-        try {
-            Main.cambiarEstadoCita(cita, doctor, CITA.Estado.RECHAZADA);
-            throw new AssertionError("Se cambió una cita terminada");
-        } catch (IllegalArgumentException esperado) { }
-        System.out.println("Flujo de citas correcto");
+        assertFalse(Main.tieneCitaPendiente(paciente.getCode()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Main.cambiarEstadoCita(cita, doctor, CITA.Estado.RECHAZADA));
+        assertFalse(Main.horarioDisponible(doctor.getCodigo(), hora));
+    }
+
+    @Test
+    void rechazoLiberaHorarioYDuplicadosSeBloquean() {
+        DOCTOR doctor = new DOCTOR(1000, "Ana", "López", "clave", "Femenino", 35, "Pediatría", "");
+        PACIENTE primero = new PACIENTE("Luis", "Pérez", "clave", "Masculino", 22, 202400000);
+        PACIENTE segundo = new PACIENTE("Eva", "Ruiz", "clave", "Femenino", 23, 202400001);
+        Main.listaDoctores.add(doctor);
+        Main.listaPacientes.add(primero);
+        Main.listaPacientes.add(segundo);
+        LocalDateTime hora = LocalDateTime.now().plusDays(1).withSecond(0).withNano(0);
+        Main.publicarHorario(doctor, hora);
+        assertThrows(IllegalArgumentException.class, () -> Main.publicarHorario(doctor, hora));
+        CITA cita = Main.solicitarCita(primero, doctor, hora, "Dolor de cabeza");
+        assertThrows(IllegalArgumentException.class,
+                () -> Main.solicitarCita(segundo, doctor, hora, "Consulta"));
+        Main.cambiarEstadoCita(cita, doctor, CITA.Estado.RECHAZADA);
+        assertTrue(Main.horarioDisponible(doctor.getCodigo(), hora));
+        assertEquals(CITA.Estado.PENDIENTE, Main.solicitarCita(segundo, doctor, hora, "Consulta").getEstado());
     }
 }

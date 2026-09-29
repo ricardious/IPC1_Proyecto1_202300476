@@ -190,7 +190,7 @@ public class Main{
         if (!publicado) return false;
         for (CITA cita : listaCitas) {
             if (cita.getCodigoDoctor() == codigoDoctor && cita.getFechaHora().equals(fechaHora)
-                    && cita.getEstado() == CITA.Estado.PENDIENTE) return false;
+                    && cita.getEstado() != CITA.Estado.RECHAZADA) return false;
         }
         return true;
     }
