@@ -13,6 +13,14 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import modelo.PACIENTE;
+import modelo.PRODUCTO;
+import modelo.CITA;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -114,10 +122,10 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         // Estilos de graficas: http://www.java2s.com/Code/Java/Chart/CatalogChart.htm
         // Insertar nuestra data (valor, "categoria", "Leyenda de la columna")
         DefaultCategoryDataset datos = new DefaultCategoryDataset();
-        datos.setValue(80, "Especialista", "Pediatra");
-        datos.setValue(70, "Especialista", "Genecólogo");
-        datos.setValue(95, "Especialista", "Urólogo");
-        datos.setValue(30, "Especialista", "Cardiólogo");
+        Map<String, Integer> conteos = new HashMap<>();
+        for (DOCTOR doctor : Main.listaDoctores) conteos.merge(doctor.getEspecialidad(), 1, Integer::sum);
+        conteos.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).limit(5)
+                .forEach(item -> datos.setValue(item.getValue(), "Doctores", item.getKey()));
 
 
 
@@ -125,7 +133,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         JFreeChart grafico_barras = ChartFactory.createBarChart3D(
             "Especialidades", // Nombre del grafico
             "Especialidades", // Nombre de las barras o columnas
-            "Porcentaje", // Nombre de la numeracion
+            "Cantidad", // Número de doctores
             datos, // Datos del grafico
             PlotOrientation.VERTICAL, // Orientacion
             true, // Leyenda de barras individuales por color
@@ -139,7 +147,7 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         cPanel.setMouseWheelEnabled(true);
         // Asignamos la posición y las dimensiones de nuestro ChartPanel
         yBotones += buttonHeight + verticalSpacing;
-        cPanel.setBounds(xBotones, yBotones, 300, 200);
+        cPanel.setBounds(xBotones, yBotones, 270, 200);
         // Agregamos a nuestra pestaña el ChartPanel con nuestro gráfico
         pest1.add(cPanel);
 
@@ -221,6 +229,14 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         eliminarProducto.setEnabled(true);
         eliminarProducto.addActionListener(this);
         pest3.add(eliminarProducto);
+        DefaultCategoryDataset productosDatos = new DefaultCategoryDataset();
+        Main.listaProductos.stream().sorted(Comparator.comparingInt(PRODUCTO::getCantidad).reversed()).limit(3)
+                .forEach(producto -> productosDatos.setValue(producto.getCantidad(), "Unidades", producto.getNombre()));
+        ChartPanel graficaProductos = new ChartPanel(ChartFactory.createBarChart(
+                "Top 3 productos", "Producto", "Cantidad", productosDatos,
+                PlotOrientation.VERTICAL, false, true, false));
+        graficaProductos.setBounds(xBotones, yBotton + buttonHeight + verticalSpacing, 270, 200);
+        pest3.add(graficaProductos);
         //=========================================================================================================
 //        tabbedPane.setTabComponentAt(100, pest1);
 
@@ -229,6 +245,12 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
         tabbedPane.addTab("Doctores", pest1);
         tabbedPane.addTab("Pacientes", pest2);
         tabbedPane.addTab("Productos", pest3);
+
+        logoutButton = new JButton("Cerrar sesión");
+        logoutButton.addActionListener(this);
+        JPanel pie = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        pie.add(logoutButton);
+        getContentPane().add(pie, java.awt.BorderLayout.SOUTH);
 
 
         tabbedPane.getSelectedIndex();
@@ -249,37 +271,128 @@ public class ADMINISTRADOR extends JFrame implements ActionListener, FocusListen
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == crearDoctor) {
             this.dispose();
-            doctorREGISTER vtn_login = new doctorREGISTER();
-
+            new doctorREGISTER();
         } else if (e.getSource() == actualizarDoctor) {
-            
-    String codigoDoctorString = JOptionPane.showInputDialog(this, "Ingrese el código del doctor a actualizar:");
-    if (codigoDoctorString != null && !codigoDoctorString.isEmpty()) {
-        try {
-            int codigoDoctor = Integer.parseInt(codigoDoctorString);
-            DOCTOR doctor = Main.obtenerDoctorPorCodigo(codigoDoctor);
-            
-            if (doctor != null) {
-                // Crear una instancia de la ventana doctorUPDATE con los datos del doctor
-                doctorUPDATE ventanaUpdate = new doctorUPDATE(doctor.getCodigo(), doctor.getNombres(), doctor.getApellidos(), doctor.getPassword(), doctor.getGenero(), doctor.getEdad(), doctor.getEspecialidad(), doctor.getTelefono());
-            } else {
-                JOptionPane.showMessageDialog(this, "El doctor con el código ingresado no existe", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Código de doctor inválido", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        this.dispose();
-    }
-}   if (e.getSource() == crearPaciente) {
+            Integer codigo = pedirCodigo("doctor a actualizar");
+            if (codigo == null) return;
+            DOCTOR doctor = Main.obtenerDoctorPorCodigo(codigo);
+            if (doctor == null) { error("El doctor no existe."); return; }
             this.dispose();
-            REGISTER vtn_register = new REGISTER();
+            new doctorUPDATE(doctor.getCodigo(), doctor.getNombres(), doctor.getApellidos(), doctor.getPassword(),
+                    doctor.getGenero(), doctor.getEdad(), doctor.getEspecialidad(), doctor.getTelefono());
+        } else if (e.getSource() == eliminarDoctor) {
+            Integer codigo = pedirCodigo("doctor a eliminar");
+            if (codigo == null) return;
+            DOCTOR doctor = Main.obtenerDoctorPorCodigo(codigo);
+            if (doctor == null) { error("El doctor no existe."); return; }
+            if (!confirmar("¿Eliminar al doctor " + doctor + "?")) return;
+            for (CITA cita : Main.listaCitas)
+                if (cita.getCodigoDoctor() == codigo && cita.getEstado() == CITA.Estado.PENDIENTE)
+                    cita.setEstado(CITA.Estado.RECHAZADA);
+            Main.listaHorarios.removeIf(horario -> horario.getCodigoDoctor() == codigo);
+            Main.listaDoctores.remove(doctor);
+            recargar();
+        } else if (e.getSource() == crearPaciente) {
+            this.dispose();
+            new REGISTER(true);
+        } else if (e.getSource() == actualizarPaciente) {
+            Integer codigo = pedirCodigo("paciente a actualizar");
+            if (codigo == null) return;
+            PACIENTE paciente = Main.obtenerPacientePorCodigo(codigo);
+            if (paciente == null) { error("El paciente no existe."); return; }
+            editarPaciente(paciente);
+        } else if (e.getSource() == eliminarPaciente) {
+            Integer codigo = pedirCodigo("paciente a eliminar");
+            if (codigo == null) return;
+            PACIENTE paciente = Main.obtenerPacientePorCodigo(codigo);
+            if (paciente == null) { error("El paciente no existe."); return; }
+            if (!confirmar("¿Eliminar al paciente " + paciente.getNombres() + "?")) return;
+            for (CITA cita : Main.listaCitas)
+                if (cita.getCodigoPaciente() == codigo && cita.getEstado() == CITA.Estado.PENDIENTE)
+                    cita.setEstado(CITA.Estado.RECHAZADA);
+            Main.listaPacientes.remove(paciente);
+            recargar();
         } else if (e.getSource() == crearProducto){
-        this.dispose();
-        vtnPRODUCTO vtn_producto = new vtnPRODUCTO();
-            
+            this.dispose();
+            new vtnPRODUCTO();
+        } else if (e.getSource() == actualizarProducto) {
+            Integer codigo = pedirCodigo("producto a actualizar");
+            if (codigo == null) return;
+            PRODUCTO producto = Main.obtenerProductoPorCodigo(codigo);
+            if (producto == null) { error("El producto no existe."); return; }
+            editarProducto(producto);
+        } else if (e.getSource() == eliminarProducto) {
+            Integer codigo = pedirCodigo("producto a eliminar");
+            if (codigo == null) return;
+            PRODUCTO producto = Main.obtenerProductoPorCodigo(codigo);
+            if (producto == null) { error("El producto no existe."); return; }
+            if (!confirmar("¿Eliminar el producto " + producto.getNombre() + "?")) return;
+            Main.listaProductos.remove(producto);
+            recargar();
+        } else if (e.getSource() == logoutButton) {
+            dispose();
+            new LOGIN();
         }
+    }
 
+    private Integer pedirCodigo(String tipo) {
+        String valor = JOptionPane.showInputDialog(this, "Ingrese el código del " + tipo + ":");
+        if (valor == null) return null;
+        try { return Integer.parseInt(valor.trim()); }
+        catch (NumberFormatException ex) { error("Ingrese un código numérico válido."); return null; }
+    }
 
+    private void error(String mensaje) { JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE); }
+
+    private boolean confirmar(String mensaje) {
+        return JOptionPane.showConfirmDialog(this, mensaje, "Confirmar", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+    }
+
+    private void recargar() { dispose(); new ADMINISTRADOR(); }
+
+    private void editarPaciente(PACIENTE paciente) {
+        JTextField nombres = new JTextField(paciente.getNombres());
+        JTextField apellidos = new JTextField(paciente.getApellidos());
+        JTextField edad = new JTextField(String.valueOf(paciente.getEdad()));
+        JPasswordField clave = new JPasswordField(paciente.getContrasena());
+        JPanel panel = new JPanel(new GridLayout(4, 2, 8, 8));
+        panel.add(new JLabel("Nombres")); panel.add(nombres);
+        panel.add(new JLabel("Apellidos")); panel.add(apellidos);
+        panel.add(new JLabel("Edad")); panel.add(edad);
+        panel.add(new JLabel("Contraseña")); panel.add(clave);
+        if (JOptionPane.showConfirmDialog(this, panel, "Actualizar paciente", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION) return;
+        try {
+            int nuevaEdad = Integer.parseInt(edad.getText().trim());
+            if (nombres.getText().isBlank() || apellidos.getText().isBlank() || clave.getPassword().length == 0 || nuevaEdad <= 0)
+                throw new IllegalArgumentException("Datos inválidos.");
+            paciente.setNombres(nombres.getText().trim()); paciente.setApellidos(apellidos.getText().trim());
+            paciente.setEdad(nuevaEdad); paciente.setContrasena(new String(clave.getPassword()));
+            recargar();
+        } catch (NumberFormatException ex) { error("La edad debe ser un número positivo."); }
+        catch (IllegalArgumentException ex) { error(ex.getMessage()); }
+    }
+
+    private void editarProducto(PRODUCTO producto) {
+        JTextField nombre = new JTextField(producto.getNombre());
+        JTextField precio = new JTextField(String.valueOf(producto.getPrecio()));
+        JTextField descripcion = new JTextField(producto.getDescripcion());
+        JTextField cantidad = new JTextField(String.valueOf(producto.getCantidad()));
+        JPanel panel = new JPanel(new GridLayout(4, 2, 8, 8));
+        panel.add(new JLabel("Nombre")); panel.add(nombre);
+        panel.add(new JLabel("Precio")); panel.add(precio);
+        panel.add(new JLabel("Descripción")); panel.add(descripcion);
+        panel.add(new JLabel("Cantidad")); panel.add(cantidad);
+        if (JOptionPane.showConfirmDialog(this, panel, "Actualizar producto", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION) return;
+        try {
+            float nuevoPrecio = Float.parseFloat(precio.getText().trim());
+            int nuevaCantidad = Integer.parseInt(cantidad.getText().trim());
+            if (nombre.getText().isBlank() || descripcion.getText().isBlank() || !Float.isFinite(nuevoPrecio)
+                    || nuevoPrecio < 0 || nuevaCantidad < 0) throw new IllegalArgumentException("Datos inválidos.");
+            producto.setNombre(nombre.getText().trim()); producto.setPrecio(nuevoPrecio);
+            producto.setDescripcion(descripcion.getText().trim()); producto.setCantidad(nuevaCantidad);
+            recargar();
+        } catch (NumberFormatException ex) { error("Precio y cantidad deben ser números válidos."); }
+        catch (IllegalArgumentException ex) { error(ex.getMessage()); }
     }
 
     @Override

@@ -149,7 +149,7 @@ public class doctorREGISTER extends JFrame implements ActionListener {
         //=======================================================================================
         // Button for registration
         registerButton = new JButton("Registrar Doctor");
-        int buttonWidth = 120;
+        int buttonWidth = 160;
         int buttonHeight = 30;
         int xRegisterButton = (frameWidth - buttonWidth) / 2;
         int yRegisterButton = yEdadLabel + 40;
@@ -212,6 +212,7 @@ public class doctorREGISTER extends JFrame implements ActionListener {
                 }
                 // Convertir la cadena de texto en un entero
                 edad = Integer.parseInt(edadTexto);
+                if (edad <= 0) throw new NumberFormatException("Edad no positiva");
             } catch (NumberFormatException ex) {
                 // Manejar el error de formato de edad aquí
                 // Puedes mostrar un mensaje de error al usuario
@@ -221,7 +222,7 @@ public class doctorREGISTER extends JFrame implements ActionListener {
             
             //==========================================================================================================  
 
-            //JOptionPane.showMessageDialog(this, "Su codigo es: " + Main.codigoDoctor,"Codigo", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Doctor registrado. Código: " + Main.codigoDoctor);
 
         // Agregar el doctor solo si todos los campos obligatorios están llenos
         Main.agregarDoctor(Main.codigoDoctor, nombres, apellidos, password, genero, edad, especialidad, telefono);
@@ -242,5 +243,4 @@ public class doctorREGISTER extends JFrame implements ActionListener {
 }
 
     }
-
 

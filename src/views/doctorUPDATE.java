@@ -115,7 +115,7 @@ public String obtenerGeneroSeleccionado() {
 
 //Campo para la contraseña
         passwordField = new JPasswordField();
-        passwordField.setEchoChar((char) 0);// Establecer el carácter de eco para ocultar la contraseña
+        passwordField.setEchoChar('\u25CF');
         passwordField.setText(password);
         int xPasswordField = xCodeField;
         int yPasswordField = yPasswordLabel;
@@ -137,6 +137,7 @@ public String obtenerGeneroSeleccionado() {
         int xGenderComboBox = xGenderLabel + labelWidth;
         int yGenderComboBox = yGenderLabel;
         genderComboBox.setBounds(xGenderComboBox, yGenderComboBox, fieldWidth, fieldHeight);
+        genderComboBox.setSelectedItem(genero);
         this.add(genderComboBox);
 
 //Etiqueta para especialidad
@@ -222,6 +223,7 @@ public void actionPerformed(ActionEvent e) {
     
     if (e.getSource() == actualizarButton) { // Verificar si se presionó el botón de actualizar
 //         Obtener los datos del doctor de los campos de texto
+        try {
         int codigo = Integer.parseInt(codeField.getText());
         String nombres = nombresField.getText();
         String apellidos = apellidosField.getText();
@@ -231,16 +233,28 @@ public void actionPerformed(ActionEvent e) {
         String especialidad = especialidadField.getText();
         String telefono = telefonoField.getText();
 
-        Main.listaDoctores.remove(codigo-1000);
-
-        DOCTOR doctor = new DOCTOR(codigo, nombres, apellidos, password, genero, edad, especialidad, telefono);
-        Main.listaDoctores.add(doctor);
+        if (nombres.isBlank() || apellidos.isBlank() || password.isBlank() || especialidad.isBlank() || edad <= 0)
+            throw new IllegalArgumentException("Complete todos los campos con datos válidos.");
+        DOCTOR doctor = Main.obtenerDoctorPorCodigo(codigo);
+        if (doctor == null) throw new IllegalArgumentException("El doctor ya no existe.");
+        doctor.setNombres(nombres.trim());
+        doctor.setApellidos(apellidos.trim());
+        doctor.setPassword(password);
+        doctor.setGenero(genero);
+        doctor.setEdad(edad);
+        doctor.setEspecialidad(especialidad.trim());
+        doctor.setTelefono(telefono.trim());
 //         Cerrar la ventana de actualización
          
         
         
         this.dispose();
         ADMINISTRADOR admin = new ADMINISTRADOR();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese una edad válida.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     } else if (e.getSource() == returnButton) {
     this.dispose();
     ADMINISTRADOR admin = new ADMINISTRADOR();

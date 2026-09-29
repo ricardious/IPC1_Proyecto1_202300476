@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 
 public class REGISTER extends JFrame implements ActionListener {
+    private final boolean desdeAdministrador;
 
     private JTextField firstNameField;
     private JTextField lastNameField;
@@ -27,7 +28,10 @@ public class REGISTER extends JFrame implements ActionListener {
     JButton returnButton;
     //----------------------------------------------------
 
-    public REGISTER() {
+    public REGISTER() { this(false); }
+
+    public REGISTER(boolean desdeAdministrador) {
+        this.desdeAdministrador = desdeAdministrador;
         // Frame dimensions
         int frameWidth = 700;
         int frameHeight = 500;
@@ -81,7 +85,7 @@ public class REGISTER extends JFrame implements ActionListener {
         this.add(passwordLabel);
         //Campo para la contraseña
         passwordField = new JPasswordField();
-        passwordField.setEchoChar((char) 0);// Establecer el carácter de eco para ocultar la contraseña
+        passwordField.setEchoChar('\u25CF');
         int xPasswordField = xFirstNameField;
         int yPasswordField = yLastNameField+40;
         passwordField.setBounds(xPasswordField, yPasswordField, fieldWidth, fieldHeight);
@@ -158,7 +162,7 @@ public class REGISTER extends JFrame implements ActionListener {
             
             //=================================================================
                     // Verificar que los campos obligatorios no estén vacíos
-        if (nombres.isEmpty() || apellidos.isEmpty() || contrasenaChars.length == 0 || genero.isEmpty()) {
+        if (nombres.isBlank() || apellidos.isBlank() || contrasenaChars.length == 0 || genero.isEmpty()) {
             // Mostrar un mensaje de error al usuario
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Campos Vacíos", JOptionPane.ERROR_MESSAGE);
             return; // Salir del método actionPerformed si hay campos obligatorios vacíos
@@ -177,6 +181,7 @@ public class REGISTER extends JFrame implements ActionListener {
                 }
                 // Convertir la cadena de texto en un entero
                 edad = Integer.parseInt(edadTexto);
+                if (edad <= 0) throw new NumberFormatException("Edad no positiva");
             } catch (NumberFormatException ex) {
                 // Manejar el error de formato de edad aquí
                 // Puedes mostrar un mensaje de error al usuario
@@ -191,7 +196,7 @@ public class REGISTER extends JFrame implements ActionListener {
             
             this.dispose();
             
-            LOGIN vtn_admin = new LOGIN();
+            regresar();
 
             // Otros campos de texto y asignaciones
 
@@ -201,10 +206,15 @@ public class REGISTER extends JFrame implements ActionListener {
             // Por ejemplo, cerrar la ventana de registro y volver a la ventana anterior
             
             this.dispose(); // Cierra la ventana actual
-            LOGIN ventana_login = new LOGIN();
+            regresar();
                     
             // Aquí podrías abrir la ventana anterior o realizar cualquier otra acción necesaria
         }
+    }
+
+    private void regresar() {
+        if (desdeAdministrador) new ADMINISTRADOR();
+        else new LOGIN();
     }
 
 }
