@@ -1,5 +1,9 @@
 # UHospital
 
+<p align="center">
+  <img src="docs/screenshots/uhospital-login.png" alt="UHospital login screen" width="560">
+</p>
+
 Java Swing desktop application for the IPC1 Project 1 hospital appointment assignment. This repository continues the original NetBeans project and its existing UI rather than replacing it with a separate application.
 
 ## Run
